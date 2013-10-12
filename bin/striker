@@ -17,3 +17,12 @@ command :new do |c|
   end
 end
 
+command :page do |c|
+	c.syntax = 'striker page PAGE_NAME'
+	c.description = 'Creates a new page'
+
+	c.action do |args, options|
+		Striker::Command::Page.process(args, options)
+	end
+end
+
