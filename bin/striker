@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'commander/import'
+require_relative '../lib/striker'
+
+program :name, 'striker'
+program :version, Striker::VERSION
+program :description, 'Simple & Lite Static Site Generator'
+ 
+command :new do |c|
+  c.syntax = 'striker new SITE_NAME'
+  c.description = 'Generates a new static site with a specified directory structure'
+
+  c.action do |args, options|
+		Striker::Command::New.process(args, options)
+  end
+end
+
