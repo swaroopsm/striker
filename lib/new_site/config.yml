@@ -1,0 +1,3 @@
+port: 1619
+assets: assets
+public_dir: public
