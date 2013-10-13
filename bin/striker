@@ -21,8 +21,11 @@ command :page do |c|
 	c.syntax = 'striker page PAGE_NAME'
 	c.description = 'Creates a new page'
 
-	c.option '--new', String, 'Create a page with a name'
-	c.option '--no-media', String, 'Do not create any media files'
+	c.option '--new [name]', String, 'Create a page with a name'
+	c.option '--no-media', String, 'Do not create any media files the page'
+	c.option '--no-image', String, 'Do not create any image files the page'
+	c.option '--no-sound', String, 'Do not create any sound files the page'
+	c.option '--no-video', String, 'Do not create any video files for the page'
 
 	c.action do |args, options|
 		options = options.__hash__
