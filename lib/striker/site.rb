@@ -11,7 +11,7 @@ module Striker
 			pages = []
 			Dir.entries(Settings::PAGES_DIR).each do |page|
 				unless page == '.' or page == '..'
-					unless ext
+					if ext
 						pages << page 
 					else
 						pages << File.basename(page, File.extname(page))
