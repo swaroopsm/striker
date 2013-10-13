@@ -11,5 +11,8 @@ module Striker
 		# Templates path for new page generation
 		PAGES_TEMPLATE  = File.expand_path(File.join('../command/templates'), __FILE__)
 
+		# Default configuration from config.yml
+		CONFIG = YAML.load_file(File.join(SOURCE_DIR, 'config.yml'))
+
 	end
 end
