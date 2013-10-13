@@ -35,3 +35,12 @@ command :page do |c|
 	end
 end
 
+command :build do |c|
+	c.syntax = 'striker build'
+	c.description = 'Build your website'
+
+	c.action do |args, options|
+
+		Striker::Build.process
+	end
+end
