@@ -18,7 +18,7 @@ command :new do |c|
 end
 
 command :page do |c|
-	c.syntax = 'striker page PAGE_NAME'
+	c.syntax = 'striker page'
 	c.description = 'Creates a new page'
 
 	c.option '--new [name]', String, 'Create a page with a name'
