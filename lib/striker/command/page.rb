@@ -3,8 +3,12 @@ module Striker
 		class Page
 
 			def self.process(args, options)
-				if options[:new] and args[0]
-					new_page args[0].downcase
+				if options[:new]
+					page_name = options[:new].downcase
+					new_page page_name
+					unless options[:no_media]
+						new_media(options, page_name)
+					end
 				else
 					raise ArgumentError, 'You need to provide a page name'
 				end
@@ -12,8 +16,6 @@ module Striker
 
 			def self.new_page(page)
 				begin
-					FileUtils.cd Settings::PAGES_DIR
-					# FileUtils.touch page+".md"
 					File.open Settings::PAGES_TEMPLATE + '/page.md', 'r' do |file|
 
 						front_matter = {
@@ -51,7 +53,13 @@ module Striker
 				end
 			end
 
-			private_class_method :get_author, :new_page
+			def self.new_media(options, page)
+				FileUtils.mkdir(File.join(Settings::MEDIA_DIR, 'images', page)) unless options[:no_image]
+				FileUtils.mkdir(File.join(Settings::MEDIA_DIR, 'sounds', page)) unless options[:no_sound]
+				FileUtils.mkdir(File.join(Settings::MEDIA_DIR, 'videos', page)) unless options[:no_video]
+			end
+
+			private_class_method :get_author, :new_page, :new_media
 
 		end
 	end
