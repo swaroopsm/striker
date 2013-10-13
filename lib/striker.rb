@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'liquid'
+require 'yaml'
 
 require_relative 'striker/version'
 require_relative 'striker/command/new'
