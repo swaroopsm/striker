@@ -41,6 +41,16 @@ command :build do |c|
 
 	c.action do |args, options|
 
-		Striker::Build.process
+		Striker::Command::Build.process
+	end
+end
+
+command :strike do |c|
+	c.syntax = 'striker serve'
+	c.description = 'Build & Preview website in the browser'
+
+	c.action do |args, options|
+
+		Striker::Command::Strike.run(args, options)
 	end
 end

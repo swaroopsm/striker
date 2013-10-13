@@ -1,11 +1,13 @@
 require 'webrick'
 
 module Striker
-	class Strike
+	module Command
+		class Strike
 
-		def self.run(args, options)
-			
+			def self.run(args, options)
+				
+			end
+
 		end
-
 	end
 end
