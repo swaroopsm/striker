@@ -9,6 +9,7 @@ require_relative 'striker/command/build'
 require_relative 'striker/command/strike'
 require_relative 'striker/settings'
 require_relative 'striker/site'
+require_relative 'striker/page'
 
 module Striker
 
