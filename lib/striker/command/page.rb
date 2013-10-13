@@ -20,7 +20,7 @@ module Striker
 							'title' => page,
 							'date' => Time.now.strftime("%Y-%m-%d"),
 							'author' => get_author,
-							'template' => 'default'
+							'template' => 'page'
 						}
 
 						contents = Liquid::Template.parse(file.read).render front_matter 
