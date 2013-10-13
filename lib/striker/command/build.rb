@@ -1,9 +1,11 @@
 module Striker
-	class Build
-		
-		def self.process
+	module Command
+		class Build
+			
+			def self.process
+
+			end
 
 		end
-
 	end
 end
