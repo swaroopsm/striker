@@ -50,7 +50,8 @@ command :strike do |c|
 	c.description = 'Build & Preview website in the browser'
 
 	c.action do |args, options|
-
+		
+		Striker::Command::Build.process
 		Striker::Command::Strike.run(args, options)
 	end
 end
