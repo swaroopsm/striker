@@ -21,7 +21,11 @@ command :page do |c|
 	c.syntax = 'striker page PAGE_NAME'
 	c.description = 'Creates a new page'
 
+	c.option '--new', String, 'Create a page with a name'
+	c.option '--no-media', String, 'Do not create any media files'
+
 	c.action do |args, options|
+		options = options.__hash__
 		Striker::Command::Page.process(args, options)
 	end
 end
