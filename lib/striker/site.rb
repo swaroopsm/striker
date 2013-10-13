@@ -1,14 +1,23 @@
 module Striker
 	class Site
 
-		attr_accessor :pages
 
 		def initialize
-			@pages = []
+
+		end
+
+		def pages(ext=false)
+			pages = []
 			Dir.entries(Settings::PAGES_DIR).each do |page|
-				@pages << File.basename(page, File.extname(page)) unless page == '.' or page == '..'
+				unless page == '.' or page == '..'
+					unless ext
+						pages << page 
+					else
+						pages << File.basename(page, File.extname(page))
+					end
+				end
 			end
-			self.pages = @pages
+			pages
 		end
 
 	end
