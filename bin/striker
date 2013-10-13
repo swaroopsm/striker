@@ -28,6 +28,8 @@ command :page do |c|
 	c.option '--no-video', String, 'Do not create any video files for the page'
 
 	c.action do |args, options|
+		options.default :no_sound => true, :no_video => true
+
 		options = options.__hash__
 		Striker::Command::Page.process(args, options)
 	end
