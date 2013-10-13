@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Striker::VERSION
   spec.authors       = ["Swaroop SM"]
   spec.email         = ["swaroop.striker@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Simple & Lite Static Site Generator}
+  spec.summary       = %q{A super simple static site generator with quick creation of pages.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "liquid", "~> 2.5.3"
   spec.add_runtime_dependency "redcarpet", "~> 3.0.0"
   spec.add_runtime_dependency "webrick", "~> 1.3.1"
+  spec.add_runtime_dependency "stringex", "~> 2.1.0"
 end
