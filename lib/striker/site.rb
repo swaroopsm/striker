@@ -1,9 +1,10 @@
 module Striker
 	class Site
 
+		attr_reader :name
 
 		def initialize
-
+			@name = Settings::CONFIG['name']
 		end
 
 		def pages(ext=false)
