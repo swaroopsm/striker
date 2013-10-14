@@ -17,6 +17,12 @@ module Striker
 			@content = extract_content.post_match
 			@name = @meta['title'].to_url
 			@template = @meta['template']
+
+			@image = Media::Image.new(self)
+		end
+
+		def images
+			@image.all
 		end
 
 	end
