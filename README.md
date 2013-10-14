@@ -28,3 +28,7 @@ TODO: Write usage instructions here
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 -->
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/swaroopsm/striker/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
