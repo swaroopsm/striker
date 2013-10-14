@@ -21,9 +21,9 @@ module Striker
 			def thumbnail
 				thumbnail = []
 				entries.each do |e|
-				 thumbnail << e if i.match(/^thumbnail\.(jpg|jpeg|bmp|gif|png|svg)/i)
+				 thumbnail << e if e.match(/^thumbnail\.(jpg|jpeg|bmp|gif|png|svg)/i)
 				end
-				thumbnail.any? ? thumbnail[0] : thumbnail
+				thumbnail.any? ? thumbnail[0] : nil
 			end
 
 			private

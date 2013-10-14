@@ -15,7 +15,12 @@ module Striker
 			template = File.open(File.join(Settings::TEMPLATES_DIR, "page.html"), 'r').read
 			markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true)
 			File.open(File.join(Settings::PUBLIC_DIR, "#{@page.name}.html"), 'w') do |f|
-				f.write Liquid::Template.parse(template).render 'content' => markdown.render(@page.content), 'page' => @page.meta
+				f.write Liquid::Template.parse(template).render(
+					'content' => markdown.render(@page.content), 
+					'page' => @page.meta,
+					'images' => @page.images,
+					'thumbnail' => @page.thumbnail
+				)
 			end
 		end
 
