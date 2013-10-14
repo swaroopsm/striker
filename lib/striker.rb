@@ -10,6 +10,7 @@ require_relative 'striker/settings'
 require_relative 'striker/site'
 require_relative 'striker/page'
 require_relative 'striker/template'
+require_relative 'striker/media/image'
 
 module Striker
 
