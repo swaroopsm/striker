@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Striker::VERSION
   spec.authors       = ["Swaroop SM"]
   spec.email         = ["swaroop.striker@gmail.com"]
-  spec.description   = %q{Simple & Lite Static Site Generator}
+  spec.description   = %q{Simple & Fast Static Site Generator}
   spec.summary       = %q{A super simple static site generator with quick creation of pages.}
   spec.homepage      = ""
   spec.license       = "MIT"
