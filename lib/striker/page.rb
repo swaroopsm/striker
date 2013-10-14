@@ -25,5 +25,9 @@ module Striker
 			@image.all
 		end
 
+		def thumbnail
+			@image.thumbnail
+		end
+
 	end
 end

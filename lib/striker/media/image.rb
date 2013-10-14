@@ -12,14 +12,29 @@ module Striker
 			# Returns all images of a page
 			def all
 				images = []
-				if Dir.exists? @dir
-					Dir.entries(@dir).each do |i|
-						unless i == '.' or i == '..'
-							images << i if i.match(/\.(jpg|jpeg|bmp|gif|png|svg)$/i)
-						end
-					end
+				entries.each do |i|
+					images << i if i.match(/\.(jpg|jpeg|bmp|gif|png|svg)$/i)
 				end
 				images
+			end
+
+			def thumbnail
+				thumbnail = []
+				entries.each do |e|
+				 thumbnail << e if i.match(/^thumbnail\.(jpg|jpeg|bmp|gif|png|svg)/i)
+				end
+				thumbnail.any? ? thumbnail[0] : thumbnail
+			end
+
+			private
+			def entries
+				entries = []
+				if Dir.exists? @dir
+					Dir.entries(@dir).each do |e|
+						entries << e unless e == '.' or e == '..'
+					end
+				end
+				entries
 			end
 
 		end
