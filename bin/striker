@@ -22,6 +22,7 @@ command :page do |c|
 	c.description = 'Creates a new page'
 
 	c.option '--new [name]', String, 'Create a page with a name'
+	c.option '--title ["title"]', String, 'Give title to the page'
 	c.option '--no-media', String, 'Do not create any media files the page'
 	c.option '--no-image', String, 'Do not create any image files the page'
 	c.option '--no-sound', String, 'Do not create any sound files the page'

@@ -5,7 +5,8 @@ module Striker
 			def self.process(args, options)
 				if options[:new]
 					page_name = options[:new].downcase
-					new_page page_name
+					title = options[:title]
+					new_page page_name, title
 					unless options[:no_media]
 						new_media(options, page_name)
 					end
@@ -14,12 +15,12 @@ module Striker
 				end
 			end
 
-			def self.new_page(page)
+			def self.new_page(page, title)
 				begin
 					File.open Settings::PAGES_TEMPLATE + '/page.md', 'r' do |file|
 
 						front_matter = {
-							'title' => page,
+							'title' => title,
 							'date' => Time.now.strftime("%Y-%m-%d"),
 							'author' => get_author,
 							'template' => 'page'
