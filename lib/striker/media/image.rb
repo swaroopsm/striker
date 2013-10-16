@@ -3,6 +3,7 @@ module Striker
 		class Image
 			
 			attr_reader :page
+			attr_accessor :url, :src
 
 			def initialize(page)
 				@page = page
@@ -13,7 +14,14 @@ module Striker
 			def all
 				images = []
 				entries.each do |i|
-					images << i if i.match(/\.(jpg|jpeg|bmp|gif|png|svg)$/i)
+					if i.match(/\.(jpg|jpeg|bmp|gif|png|svg)$/i) and not i.match(/^thumbnail\.(jpg|jpeg|bmp|gif|png|svg)/i)
+						image = {
+							'src' => i,
+							'url' => nil,
+							'content_type' => mime_type(i)
+						}
+						images << image
+					end
 				end
 				images
 			end
@@ -23,7 +31,7 @@ module Striker
 				entries.each do |e|
 				 thumbnail << e if e.match(/^thumbnail\.(jpg|jpeg|bmp|gif|png|svg)/i)
 				end
-				thumbnail.any? ? thumbnail[0] : nil
+				thumbnail.any? ? { 'src' => thumbnail[0], 'content_type' => mime_type(thumbnail[0]), 'url' => nil } : nil
 			end
 
 			private
@@ -35,6 +43,10 @@ module Striker
 					end
 				end
 				entries
+			end
+
+			def mime_type(image)
+				MIME::Types.type_for(File.extname(image))[0].content_type
 			end
 
 		end
