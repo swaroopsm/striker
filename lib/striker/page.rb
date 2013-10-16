@@ -10,23 +10,24 @@ module Striker
 		attr_reader :meta, :content, :title, :name, :template
 
 		def initialize(page)
-			page = File.join Settings::PAGES_DIR, page
-			@meta = YAML.load_file(page)
+			@page = File.join Settings::PAGES_DIR, page
+			@meta = YAML.load_file(@page)
 			@title = @meta['title']
-			extract_content = File.open(page, 'r').read.match(/^(?<headers>---\s*\n.*?\n?)^(---\s*$\n?)/m)
 			@content = extract_content.post_match
 			@name = @meta['title'].to_url
 			@template = @meta['template']
 
-			@image = Media::Image.new(self)
+			@meta['images'] = self.image.all
+			@meta['thumbnail'] = self.image.thumbnail
+		end
+		
+		def image
+			Media::Image.new(self)
 		end
 
-		def images
-			@image.all
-		end
-
-		def thumbnail
-			@image.thumbnail
+		private
+		def extract_content
+			File.open(@page, 'r').read.match(/^(?<headers>---\s*\n.*?\n?)^(---\s*$\n?)/m)
 		end
 
 	end
