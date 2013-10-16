@@ -18,8 +18,6 @@ module Striker
 				f.write Liquid::Template.parse(template).render(
 					'content' => markdown.render(@page.content), 
 					'page' => @page.meta,
-					'images' => @page.images,
-					'thumbnail' => @page.thumbnail
 				)
 			end
 		end
