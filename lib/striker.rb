@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'yaml'
+require 'mime-types'
 
 require_relative 'striker/version'
 require_relative 'striker/command/new'
