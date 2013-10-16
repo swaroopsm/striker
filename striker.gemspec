@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "redcarpet", "~> 3.0.0"
   spec.add_runtime_dependency "webrick", "~> 1.3.1"
   spec.add_runtime_dependency "stringex", "~> 2.1.0"
+  spec.add_runtime_dependency "mime-types", "~> 1.25"
 end
