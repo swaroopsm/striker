@@ -18,6 +18,7 @@ module Striker
 				f.write Liquid::Template.parse(template).render(
 					'content' => markdown.render(@page.content), 
 					'page' => @page.meta,
+					'site' => Settings::CONFIG
 				)
 			end
 		end
