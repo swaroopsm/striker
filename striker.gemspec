@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "webrick", "~> 1.3.1"
   spec.add_runtime_dependency "stringex", "~> 2.1.0"
   spec.add_runtime_dependency "mime-types", "~> 1.25"
+  spec.add_runtime_dependency "rmagick", "~> 2.13.2"
 end
