@@ -48,7 +48,11 @@ module Striker
 				base_dir = File.join(Settings::MEDIA_DIR, 'images', @image_options[:context]['base_dir'])
 				src = @image_options[:context]['thumbnail']['src']
 				image = ImageList.new(File.join(base_dir, "thumbnail#{File.extname src}")).first
-				image.resize!(@image_options[:width].to_i, @image_options[:height].to_i)
+				if @image_options[:scale]
+					image.resize!(@image_options[:scale].to_f)
+				elsif @image_options[:width] and @image_options[:height]
+					image.resize!(@image_options[:width].to_i, @image_options[:height].to_i)
+				end
 				image.write File.join(Settings::ASSETS_DIR, 'images', src)
 			end
 
