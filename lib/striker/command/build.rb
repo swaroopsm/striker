@@ -3,6 +3,7 @@ module Striker
 		class Build
 			
 			def self.process
+				FileUtils.rm_rf(File.join Settings::PUBLIC_DIR, ".")
 				FileUtils.mkdir_p(Settings::PUBLIC_DIR)
 				FileUtils.mkdir_p(Settings::ASSETS_DIR)
 				Dir.glob(Settings::MEDIA_DIR + "/*").each do |d|
