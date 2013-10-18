@@ -7,9 +7,10 @@ module Striker
 	class Page
 
 
-		attr_reader :meta, :content, :title, :name, :template
+		attr_reader :meta, :content, :title, :name, :template, :base_dir
 
 		def initialize(page)
+			@base_dir = File.basename page, File.extname(page)
 			@page = File.join Settings::PAGES_DIR, page
 			@meta = YAML.load_file(@page)
 			@title = @meta['title']
@@ -18,7 +19,8 @@ module Striker
 			@template = @meta['template']
 
 			@meta['images'] = self.image.all
-			@meta['thumbnail'] = self.image.thumbnail
+			# @meta['thumbnail'] = self.image.thumbnail
+			self.image.thumbnail
 		end
 		
 		def image
