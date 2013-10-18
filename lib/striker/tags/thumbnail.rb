@@ -16,7 +16,10 @@ module Striker
 					@id = m[2] || ""
 					@class = m[3] || ""
 				else
-
+					if m = markup.match(/#?\[?([\w|-|\s]+)*\]?\s?\.?\[?([\w|\s|-]+)*\]?/)
+						@id = m[1] || ""
+						@class = m[2] || ""
+					end
 				end
 			end
 
