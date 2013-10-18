@@ -14,5 +14,7 @@ module Striker
 		# Default configuration from config.yml
 		CONFIG = YAML.load_file(File.join(SOURCE_DIR, 'config.yml'))
 
+		ASSETS_DIR		 = File.join(PUBLIC_DIR, CONFIG['assets'])
+
 	end
 end
