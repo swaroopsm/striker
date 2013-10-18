@@ -1,13 +1,18 @@
+require 'RMagick'
+
 module Striker
 	module Media
 		class Image
-			
-			attr_reader :page
+
+			include Magick
+
+			attr_reader :page, :image_options
 			attr_accessor :url, :src
 
-			def initialize(page)
+			def initialize(page, image_options={})
 				@page = page
-				@dir = File.join(Settings::MEDIA_DIR, "images", page.name)
+				@dir = File.join(Settings::MEDIA_DIR, "images", page.base_dir) if @page
+				@image_options = image_options
 			end
 
 			# Returns all images of a page
@@ -29,9 +34,22 @@ module Striker
 			def thumbnail
 				thumbnail = []
 				entries.each do |e|
-				 thumbnail << e if e.match(/^thumbnail\.(jpg|jpeg|bmp|gif|png|svg)/i)
+				thumbnail << e if e.match(/^thumbnail\.(jpg|jpeg|bmp|gif|png|svg)/i)
 				end
-				thumbnail.any? ? { 'src' => thumbnail[0], 'content_type' => mime_type(thumbnail[0]), 'url' => nil } : nil
+				if thumbnail.any?
+					full_image = File.join(@dir, thumbnail[0])
+					new_image_name = @page.name + File.extname(full_image)
+
+					{ 'src' => new_image_name, 'content_type' => mime_type(thumbnail[0]), 'url' => File.join('/', Settings::CONFIG['assets'], 'images', new_image_name) }
+				end
+			end
+
+			def thumbnailize
+				base_dir = File.join(Settings::MEDIA_DIR, 'images', @image_options[:context]['base_dir'])
+				src = @image_options[:context]['thumbnail']['src']
+				image = ImageList.new(File.join(base_dir, "thumbnail#{File.extname src}")).first
+				image.resize!(@image_options[:width].to_i, @image_options[:height].to_i)
+				image.write File.join(Settings::ASSETS_DIR, 'images', src)
 			end
 
 			private
