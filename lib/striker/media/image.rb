@@ -20,11 +20,13 @@ module Striker
 				images = []
 				entries.each do |i|
 					if i.match(/\.(jpg|jpeg|bmp|gif|png|svg)$/i) and not i.match(/^thumbnail\.(jpg|jpeg|bmp|gif|png|svg)/i)
+						page_image = ImageList.new(File.join(Settings::MEDIA_DIR, "images", @page.base_dir, i)).first
 						image = {
 							'src' => i,
-							'url' => nil,
+							'url' => "/#{Settings::CONFIG['assets']}/images/#{@page.name}-#{i}",
 							'content_type' => mime_type(i)
 						}
+						page_image.write File.join(Settings::ASSETS_DIR, 'images', "#{@page.name}-#{i}")
 						images << image
 					end
 				end
