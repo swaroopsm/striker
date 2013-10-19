@@ -4,7 +4,7 @@ module Striker
 
 			def initialize(tag, markup, tokens)
 				super
-				if m = markup.match(/^(\w+)\s?(\d+)w\s?(\d+)h/i)
+				if m = markup.match(/^(\w+)\s?(\d+%?)w\s?(\d+%?)h/i)
 					@video_id = m[1]
 					@width = m[2]
 					@height = m[3]
