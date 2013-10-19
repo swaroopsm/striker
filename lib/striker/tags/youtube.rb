@@ -1,8 +1,9 @@
 module Striker
 	module Tags
-		class Youtube
+		class Youtube < Liquid::Tag
 
 			def initialize(tag, markup, tokens)
+				super
 				if m = markup.match(/^(\w+)\s?(\d+)w\s?(\d+)h/i)
 					@video_id = m[1]
 					@width = m[2]
