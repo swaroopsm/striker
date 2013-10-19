@@ -12,9 +12,11 @@ module Striker
 		PAGES_TEMPLATE  = File.expand_path(File.join('../command/templates'), __FILE__)
 
 		# Default configuration from config.yml
-		CONFIG = YAML.load_file(File.join(SOURCE_DIR, 'config.yml'))
+		if File.exists? File.join SOURCE_DIR, 'config.yml'
+			CONFIG = YAML.load_file(File.join(SOURCE_DIR, 'config.yml'))
 
-		ASSETS_DIR		 = File.join(PUBLIC_DIR, CONFIG['assets'])
+			ASSETS_DIR		 = File.join(PUBLIC_DIR, CONFIG['assets'])
+		end
 
 	end
 end
