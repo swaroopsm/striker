@@ -17,6 +17,7 @@ require_relative 'striker/media/image'
 require_relative 'striker/tags/thumbnail'
 require_relative 'striker/tags/youtube'
 require_relative 'striker/tags/vimeo'
+require_relative 'striker/tags/soundcloud'
 
 module Striker
 
