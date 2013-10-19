@@ -28,7 +28,8 @@ module Striker
 					'meta' => @page.meta,
 					'thumbnail' => @page.image.thumbnail,
 					'name' => @page.name,
-					'base_dir' => @page.base_dir
+					'base_dir' => @page.base_dir,
+					'images' => @page.image.all
 				 }
 			)
 		end

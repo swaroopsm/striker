@@ -18,7 +18,7 @@ module Striker
 			@name = @meta['title'].to_url
 			@template = @meta['template']
 
-			@meta['images'] = self.image.all
+			# @meta['images'] = self.image.all
 			# @meta['thumbnail'] = self.image.thumbnail
 			self.image.thumbnail
 		end
