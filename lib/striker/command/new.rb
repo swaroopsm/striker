@@ -11,7 +11,7 @@ module Striker
 				FileUtils.mkdir_p File.join(Settings::SOURCE_DIR, site_name, "pages")
 				FileUtils.mkdir_p File.join(Settings::SOURCE_DIR, site_name, "media/images")
 				FileUtils.mkdir_p File.join(Settings::SOURCE_DIR, site_name, "media/videos")
-				FileUtils.mkdir_p File.join(Settings::SOURCE_DIR, site_name, "mediasounds")
+				FileUtils.mkdir_p File.join(Settings::SOURCE_DIR, site_name, "media/sounds")
 			end
 
 		end
