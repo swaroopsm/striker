@@ -11,10 +11,10 @@ module Striker
 		def process
 			template = File.open(File.join(Settings::TEMPLATES_DIR, "page.html"), 'r').read
 			markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true)
-			File.open(File.join(Settings::PUBLIC_DIR, "#{@page.name}.html"), 'w') do |f|
+			File.open(File.join(Settings::PUBLIC_DIR, "#{@page.permalink}"), 'w') do |f|
 				f.write Liquid::Template.parse(template).render(
 					'content' => parsed_content(markdown), 
-					'page' => @page.meta,
+					'page' => @page.page_data,
 					'site' => Settings::CONFIG
 				)
 			end
@@ -24,13 +24,7 @@ module Striker
 		def parsed_content(markdown)
 			Liquid::Template.parse(markdown.render(@page.content)).render(
 				'site' => Settings::CONFIG,
-				'page' => {
-					'meta' => @page.meta,
-					'thumbnail' => @page.image.thumbnail,
-					'name' => @page.name,
-					'base_dir' => @page.base_dir,
-					'images' => @page.image.all
-				 }
+				'page' => @page.page_data
 			)
 		end
 
