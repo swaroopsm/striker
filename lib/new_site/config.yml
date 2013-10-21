@@ -2,6 +2,9 @@ name: Your Website Name
 port: 1619
 assets: assets
 public_dir: public
+permalink:
+  style: :name
+  pretty: true
 include_assets:
  - css
  - js
