@@ -1,3 +1,4 @@
+[![Code Climate](https://codeclimate.com/github/swaroopsm/striker.png)](https://codeclimate.com/github/swaroopsm/striker)
 # Striker
 
 A Simple & Fast Static Site Generator. Striker has been released as a pre version as of now, to get reviews and bug reports.
