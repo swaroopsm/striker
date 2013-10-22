@@ -21,5 +21,11 @@ module Striker
 			pages
 		end
 
+		def self.meta
+			data = Settings::CONFIG
+			data['tags'] = Tag.all
+			data
+		end
+
 	end
 end

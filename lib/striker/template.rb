@@ -15,7 +15,7 @@ module Striker
 				f.write Liquid::Template.parse(template).render(
 					'content' => parsed_content(markdown), 
 					'page' => @page.page_data,
-					'site' => Settings::CONFIG
+					'site' => Site.meta
 				)
 			end
 		end
@@ -23,7 +23,7 @@ module Striker
 		private
 		def parsed_content(markdown)
 			Liquid::Template.parse(markdown.render(@page.content)).render(
-				'site' => Settings::CONFIG,
+				'site' => Site.meta,
 				'page' => @page.page_data
 			)
 		end
