@@ -14,11 +14,16 @@ module Striker
 					FileUtils.mkdir_p File.join(Settings::ASSETS_DIR, d.split("/")[-1]) if File.directory? d
 				end
 				site = Site.new
+
+				# Process Pages
 				site.pages(true).each do |p|
 					page = Striker::Page.new(p)
 					t = Template.new(page)
 					t.process
 				end
+
+				# Process Site Tags
+				Tag.process if Settings::CONFIG['tagged']
 			end
 
 		end
