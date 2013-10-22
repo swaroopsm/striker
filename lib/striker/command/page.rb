@@ -40,7 +40,7 @@ module Striker
 			def self.get_author
 				Dir.chdir
 				if File.exists? '.gitconfig'
-					re = /name\s?=\s?(.*)/
+					re = /name\s*=\s*(.*)/
 					File.open('.gitconfig', 'r') do |file|
 						match = file.read.match re
 						if match
