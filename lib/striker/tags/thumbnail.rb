@@ -27,7 +27,7 @@ module Striker
 				image = Media::Image.new(nil, image_options = { :width => @width, :height => @height, :scale => @scale, :context => context['page'] })
 				image.thumbnailize
 				%Q{
-					<img src="/#{Settings::CONFIG['assets']}/images/#{context['page']['thumbnail']['src']}" alt="#{context['page']['meta']['title']}"  id="#{@id}" class="#{@class}">
+					<img src="/#{Settings::CONFIG['assets']}/images/#{context['page']['thumbnail']['src']}" alt="#{context['page']['title']}"  id="#{@id}" class="#{@class}">
 				}
 			end
 
