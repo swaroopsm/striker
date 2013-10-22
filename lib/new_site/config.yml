@@ -5,6 +5,7 @@ public_dir: public
 permalink:
   style: :name
   pretty: true
+homepage: index
 include_assets:
  - css
  - js
