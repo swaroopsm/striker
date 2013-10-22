@@ -18,10 +18,6 @@ module Striker
 			@name = @meta['title'].to_url
 			@permalink = permalink_page
 			@template = @meta['template']
-
-			# @meta['images'] = self.image.all
-			# @meta['thumbnail'] = self.image.thumbnail
-			self.image.thumbnail
 		end
 		
 		def page_data
@@ -54,7 +50,7 @@ module Striker
 											@name
 										end
 				if Settings::CONFIG['permalink']['pretty']
-					FileUtils.mkdir_p(File.join(Settings::PUBLIC_DIR, filename))
+					FileUtils.mkdir_p(File.join(Settings::PUBLIC_DIR, filename)) 
 					filename + "/index.html"
 				else
 					filename + ".html"
