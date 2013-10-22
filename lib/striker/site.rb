@@ -23,7 +23,6 @@ module Striker
 
 		def self.meta
 			data = Settings::CONFIG
-			data['tags'] = Tag.all
 			data
 		end
 
