@@ -44,19 +44,23 @@ module Striker
 		end
 
 		def permalink_page
-			filename = case Settings::CONFIG['permalink']['style']
-									when :name
-										@base_dir
-									when :title
-										@name
-									else
-										@name
-									end
-			if Settings::CONFIG['permalink']['pretty']
-				FileUtils.mkdir_p(File.join(Settings::PUBLIC_DIR, filename))
-				filename + "/index.html"
+			unless Settings::CONFIG['homepage'] == @base_dir
+				filename = case Settings::CONFIG['permalink']['style']
+										when :name
+											@base_dir
+										when :title
+											@name
+										else
+											@name
+										end
+				if Settings::CONFIG['permalink']['pretty']
+					FileUtils.mkdir_p(File.join(Settings::PUBLIC_DIR, filename))
+					filename + "/index.html"
+				else
+					filename + ".html"
+				end
 			else
-				filename + ".html"
+				"index.html"
 			end
 		end
 
