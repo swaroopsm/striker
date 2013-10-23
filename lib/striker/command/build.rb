@@ -15,15 +15,12 @@ module Striker
 				end
 				site = Site.new
 
-				# Process Pages
 				site.pages(true).each do |p|
 					page = Striker::Page.new(p)
 					t = Template.new(page)
 					t.process
 				end
 
-				# Process Site Tags
-				Tag.process if Settings::CONFIG['tagged']
 			end
 
 		end
