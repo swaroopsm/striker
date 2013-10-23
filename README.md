@@ -82,7 +82,8 @@ You can specify the size of the image using width/height. or you can also scale 
 #####
 	{% thumbnail 0.5s #[image-id] .[image-class] %}
 
-If you would like to display images in your template use the following:
+To display non-thumbnail images, drop images into the appropriate page's `images/` directory.
+Then to display images in your template use the following:
 #####
 	{% for image in page.images %}
 		<img src="{{ image.url }}" />
