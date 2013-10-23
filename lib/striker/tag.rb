@@ -1,6 +1,22 @@
 module Striker
 	class Tag
 		
+		attr_reader :tag
+
+		def initialize(tag)
+			@tag = tag
+		end 
+
+		def pages
+			pages = []
+			Dir.chdir(Settings::PAGES_DIR)
+			Dir.glob("*[.md|.markdown]").each do |page|
+				page = Page.new(page)
+				pages << page.page_data if page.meta['tags'] and page.meta['tags'].include? tag
+			end
+			pages
+		end
+
 		def self.list
 			tags = []
 			Dir.chdir(Settings::PAGES_DIR)
@@ -13,7 +29,6 @@ module Striker
 
 		def self.list_full
 			tags = []
-			pages = []
 			Dir.chdir(Settings::PAGES_DIR)
 			pages = Dir.glob("*[.md|.markdown]").map{ |page| Page.new(page) }
 			self.list.each do |tag|
