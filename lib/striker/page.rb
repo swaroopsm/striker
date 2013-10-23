@@ -22,6 +22,7 @@ module Striker
 		
 		def page_data
 			data = self.meta
+			data['url'] = page_url
 			data['thumbnail'] = self.image.thumbnail
 			data['name'] = self.name
 			data['base_dir'] = self.base_dir
@@ -57,6 +58,16 @@ module Striker
 				end
 			else
 				"index.html"
+			end
+		end
+
+		def page_url
+			if @permalink.match(/^index.html/)
+				"/"
+			elsif @permalink.match(/^([\w-]+)\/(index.html)/)
+				"/#{$1}"
+			else
+				"/#{@permalink}"
 			end
 		end
 
