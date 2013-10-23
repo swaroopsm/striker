@@ -5,6 +5,7 @@ module Striker
 		SOURCE_DIR     = Dir.pwd
 		PAGES_DIR      = File.join(SOURCE_DIR, 'pages')
 		TEMPLATES_DIR  = File.join(SOURCE_DIR, 'templates')
+		EXTRAS_DIR     = File.join(SOURCE_DIR, 'extras')
 		MEDIA_DIR      = File.join(SOURCE_DIR, 'media')
 		PUBLIC_DIR 		 = File.join(SOURCE_DIR, 'public')
 
