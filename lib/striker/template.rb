@@ -31,12 +31,15 @@ module Striker
 
 		def process_tags
 			Tag.process
+			
+			# Tag index template for tags
 			index_template = File.open(File.join(Settings::EXTRAS_DIR, "tags/index.html"), "r").read
 			File.open(File.join(Settings::PUBLIC_DIR, Settings::CONFIG['tagged']['style'], "index.html"), "w") do |f|
 				f.write Liquid::Template.parse(index_template).render(
 					'site' => Site.meta
 				)
 			end
+
 			# Process each tag
 			template = File.open(File.join(Settings::EXTRAS_DIR, "tags/tag.html"), "r").read
 			Tag.list.each do |tag|
