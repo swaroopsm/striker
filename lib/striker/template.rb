@@ -9,7 +9,7 @@ module Striker
 		end
 
 		def process
-			template = File.open(File.join(Settings::TEMPLATES_DIR, "page.html"), 'r').read
+			template = File.open(File.join(Settings::TEMPLATES_DIR, "#{@page.template}.html"), 'r').read
 			markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true)
 			File.open(File.join(Settings::PUBLIC_DIR, "#{@page.permalink}"), 'w') do |f|
 				f.write Liquid::Template.parse(template).render(
