@@ -33,7 +33,7 @@ module Striker
 			Tag.process
 			
 			# Tag index template for tags
-			index_template = File.open(File.join(Settings::EXTRAS_DIR, "tags/index.html"), "r").read
+			index_template = File.open(File.join(Settings::TEMPLATES_DIR, "tags/index.html"), "r").read
 			File.open(File.join(Settings::PUBLIC_DIR, Settings::CONFIG['tagged']['style'], "index.html"), "w") do |f|
 				f.write Liquid::Template.parse(index_template).render(
 					'site' => Site.meta
@@ -41,7 +41,7 @@ module Striker
 			end
 
 			# Process each tag
-			template = File.open(File.join(Settings::EXTRAS_DIR, "tags/tag.html"), "r").read
+			template = File.open(File.join(Settings::TEMPLATES_DIR, "tags/tag.html"), "r").read
 			Tag.list.each do |tag|
 				File.open(File.join(Settings::PUBLIC_DIR, Settings::CONFIG['tagged']['style'], tag, "index.html"), "w") do |f|
 					f.write Liquid::Template.parse(template).render(
