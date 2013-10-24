@@ -35,6 +35,15 @@ module Striker
 			Media::Image.new(self)
 		end
 
+		def self.list_full
+			pages = []
+			Dir.chdir(Settings::PAGES_DIR)
+			Dir.glob("*[.md|markdown]").each do |page|
+				pages << Page.new(page).page_data
+			end
+			pages
+		end
+
 		private
 		def extract_content
 			File.open(@page, 'r').read.match(/^(?<headers>---\s*\n.*?\n?)^(---\s*$\n?)/m)

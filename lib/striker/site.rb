@@ -23,6 +23,7 @@ module Striker
 
 		def self.meta
 			data = Settings::CONFIG
+			data['pages'] = Page.list_full
 			data['tags'] = Tag.list_full
 			data
 		end
