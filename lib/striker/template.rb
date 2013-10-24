@@ -4,8 +4,9 @@ module Striker
 		
 		attr_reader :page
 
-		def initialize(page)
+		def initialize(page, meta)
 			@page = page
+			@site_meta = meta
 		end
 
 		def process
@@ -15,7 +16,7 @@ module Striker
 				f.write Liquid::Template.parse(template).render(
 					'content' => parsed_content(markdown), 
 					'page' => @page.page_data,
-					'site' => Site.meta
+					'site' => @site_meta
 				)
 			end
 			process_tags if Settings::CONFIG['tagged']
@@ -24,7 +25,7 @@ module Striker
 		private
 		def parsed_content(markdown)
 			Liquid::Template.parse(markdown.render(@page.content)).render(
-				'site' => Site.meta,
+				'site' => @site_meta,
 				'page' => @page.page_data
 			)
 		end
@@ -36,7 +37,7 @@ module Striker
 			index_template = File.open(File.join(Settings::TEMPLATES_DIR, "tags/index.html"), "r").read
 			File.open(File.join(Settings::PUBLIC_DIR, Settings::CONFIG['tagged']['style'], "index.html"), "w") do |f|
 				f.write Liquid::Template.parse(index_template).render(
-					'site' => Site.meta
+					'site' => @site_meta
 				)
 			end
 
@@ -45,7 +46,7 @@ module Striker
 			Tag.list.each do |tag|
 				File.open(File.join(Settings::PUBLIC_DIR, Settings::CONFIG['tagged']['style'], tag, "index.html"), "w") do |f|
 					f.write Liquid::Template.parse(template).render(
-						'site' => Site.meta,
+						'site' => @site_meta,
 						'pages' => Tag.new(tag).pages
 					)
 				end

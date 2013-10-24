@@ -14,10 +14,11 @@ module Striker
 					FileUtils.mkdir_p File.join(Settings::ASSETS_DIR, d.split("/")[-1]) if File.directory? d
 				end
 				site = Site.new
+				meta = site.meta
 
 				site.pages(true).each do |p|
 					page = Striker::Page.new(p)
-					t = Template.new(page)
+					t = Template.new(page, meta)
 					t.process
 				end
 

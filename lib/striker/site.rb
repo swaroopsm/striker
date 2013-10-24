@@ -21,10 +21,11 @@ module Striker
 			pages
 		end
 
-		def self.meta
+		def meta
 			data = Settings::CONFIG
 			data['pages'] = Page.list_full
 			data['tags'] = Tag.list_full
+			data['archive'] = Archive.list_full
 			data
 		end
 
