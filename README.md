@@ -95,6 +95,7 @@ Then to display images in your template use the following:
 	$ striker strike
 This starts the server at `localhost` and port `1619`
 
+### Some Goodies:
 ##### Adding tags to pages
 In your `config.yml`
 #
@@ -104,6 +105,16 @@ This specifies the page that you want to serve for tags. For Eg.: if you want so
 #
 	tagged:
 		style: tags
+
+To create markup for your templates `striker` provides two files:
+
+To provide markup for the main tags page. Eg.: `http://yoursite.com/tagged` add markup in the following template.
+
+* `templates/tags/index.html`
+		
+To provide markup for a specific tag page. Eg.: `http://yoursite.com/tagged/ruby` add markup in the following template
+
+* `templates/tags/tag.html`
 
 ##### Helper Tags Available:
 *Embed YouTube Video*
