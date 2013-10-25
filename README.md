@@ -63,6 +63,8 @@ Striker uses [Liquid Templating](http://liquidmarkup.org).
 To define a new template add a file called `my_template.html` in `templates/` and you can specify this template in your `markdown` pages.
 
 #### Dealing with Images
+Make sure you have [ImageMagick](http://www.imagemagick.org/script/index.php) installed.
+
 ##### Add thumbnail to a page.
 If you would like to make an image appear on one of your pages, simply add an image named as thumbnail.(jpg|png|gif) to the images directory of your page.
 Eg.: If you would like to add a thumbnail to your home page, place a `thumbnail.jpg` in `images/home/thumbnail.jpg`
@@ -92,6 +94,16 @@ Then to display images in your template use the following:
 ##### Start the Server
 	$ striker strike
 This starts the server at `localhost` and port `1619`
+
+##### Adding tags to pages
+In your `config.yml`
+#
+	tagged:
+		style: tagged
+This specifies the page that you want to serve for tags. For Eg.: if you want something like `http://yoursite.com/tags` change it to the following:
+#
+	tagged:
+		style: tags
 
 ##### Helper Tags Available:
 *Embed YouTube Video*
