@@ -19,7 +19,6 @@ module Striker
 					'site' => @site_meta
 				)
 			end
-			process_tags if Settings::CONFIG['tagged']
 		end
 
 		private
@@ -28,29 +27,6 @@ module Striker
 				'site' => @site_meta,
 				'page' => @page.page_data
 			)
-		end
-
-		def process_tags
-			Tag.process
-			
-			# Tag index template for tags
-			index_template = File.open(File.join(Settings::TEMPLATES_DIR, "tags/index.html"), "r").read
-			File.open(File.join(Settings::PUBLIC_DIR, Settings::CONFIG['tagged']['style'], "index.html"), "w") do |f|
-				f.write Liquid::Template.parse(index_template).render(
-					'site' => @site_meta
-				)
-			end
-
-			# Process each tag
-			template = File.open(File.join(Settings::TEMPLATES_DIR, "tags/tag.html"), "r").read
-			Tag.list.each do |tag|
-				File.open(File.join(Settings::PUBLIC_DIR, Settings::CONFIG['tagged']['style'], tag, "index.html"), "w") do |f|
-					f.write Liquid::Template.parse(template).render(
-						'site' => @site_meta,
-						'pages' => Tag.new(tag).pages
-					)
-				end
-			end
 		end
 
 	end
