@@ -13,14 +13,15 @@ module Striker
 				Dir.glob(Settings::MEDIA_DIR + "/*").each do |d|
 					FileUtils.mkdir_p File.join(Settings::ASSETS_DIR, d.split("/")[-1]) if File.directory? d
 				end
-				site = Site.new
-				meta = site.meta
 
-				site.pages(true).each do |p|
+				meta = Site.meta
+				Site.pages(true).each do |p|
 					page = Striker::Page.new(p)
 					t = Template.new(page, meta)
 					t.process
 				end
+
+				Tag.process if Settings::CONFIG['tagged']
 
 			end
 
