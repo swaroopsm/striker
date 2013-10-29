@@ -10,7 +10,7 @@ module Striker
 			grouped_pages = []
 			pages = []
 			Dir.chdir(Settings::PAGES_DIR)
-			Dir.glob("*[.md|markdown]").each do |page|
+			Dir.glob("*[.md|.markdown]").each do |page|
 				grouped_pages << Page.new(page).page_data
 			end
 			if Settings::CONFIG['archive']['period'] == :year
@@ -20,7 +20,7 @@ module Striker
 			end
 			grouped_pages.each do |p| 
 				process_archive_dir(p[0])
-				date = p[0].class == Array ? p[0].join(" ") : p[0]
+				date = p[0].class == Array ? Date.new(p[0][0].to_i, Date::MONTHNAMES.index(p[0][1]), 1): p[0]
 				pages << { 'date' => date, 'pages' => p[1] }
 			end
 			pages
