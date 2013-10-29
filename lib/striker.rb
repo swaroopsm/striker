@@ -3,6 +3,7 @@ require 'yaml'
 require 'mime-types'
 require 'redcarpet'
 require 'liquid'
+require 'date'
 
 require_relative 'striker/version'
 require_relative 'striker/command/new'
