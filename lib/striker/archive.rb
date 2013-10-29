@@ -1,8 +1,10 @@
 module Striker
 	class Archive
 		
-		@@dir = Settings::CONFIG['archive']['style']
-		@@period = Settings::CONFIG['archive']['period']
+		if File.exists? File.join(Settings::SOURCE_DIR, "config.yml")
+			@@dir = Settings::CONFIG['archive']['style'] if File.exists?
+			@@period = Settings::CONFIG['archive']['period'] || nil
+		end
 
 		def self.process(site_meta)
 			@@site_meta = site_meta
