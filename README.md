@@ -116,6 +116,37 @@ To provide markup for a specific tag page. Eg.: `http://yoursite.com/tagged/ruby
 
 * `templates/tags/tag.html`
 
+##### Site Archive
+Archive of posts is quite commin in blogs. If you would like to add an archive to your site, follow the below steps:
+
+In your `config.yml` add the following if it does not exist:
+#
+	archive:
+		style: archive
+		period: :month
+
+The `style` parameter specifies the path name; the above would create `http://yoursite.com/archive/2013/10`
+
+You can provide two values to the `period` parameter - `:year` or `:month`
+
+The `:year` value would create a path like: `http://yoursite.com/archive/2013`
+
+The `:month` value would create a path like: `http://yoursite.com/archive/2013/10`
+
+*Note:*
+
+For the archive to be fully functional and work as expected you need to provide the `date` in the front-matter of all your pages without which can lead to incorrect results.
+
+The templates for specifying the markup are in `templates/archive/index.html`.
+
+To access all site archives you can use `site.archives` in your templates
+
+To access a specific archive in your archive templates use the following:
+#
+	{% for page in archive.pages %}
+		<a href="{{ page.url }}">{{ page.title }}</a>
+	{% endfor %}
+
 ##### Helper Tags Available:
 *Embed YouTube Video*
 #####
