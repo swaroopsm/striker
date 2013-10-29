@@ -22,10 +22,10 @@ module Striker
 				end
 
 				# Process Tags
-				Tag.process if Settings::CONFIG['tagged']
+				Tag.process(meta) if Settings::CONFIG['tagged']
 
 				# Process Archive
-				Archive.process if Settings::CONFIG['archive']
+				Archive.process(meta) if Settings::CONFIG['archive']
 
 			end
 

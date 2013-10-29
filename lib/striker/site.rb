@@ -19,7 +19,7 @@ module Striker
 			data = Settings::CONFIG
 			data['pages'] = Page.list_full
 			data['tags'] = Tag.list_full
-			# data['archive'] = Archive.list_full
+			data['archive'] = Archive.list_full
 			data
 		end
 
