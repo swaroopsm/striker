@@ -21,7 +21,11 @@ module Striker
 					t.process
 				end
 
+				# Process Tags
 				Tag.process if Settings::CONFIG['tagged']
+
+				# Process Archive
+				Archive.process if Settings::CONFIG['archive']
 
 			end
 
