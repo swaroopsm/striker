@@ -7,9 +7,10 @@ module Striker
 	class Page
 
 
-		attr_reader :meta, :content, :title, :name, :template, :base_dir, :permalink
+		attr_reader :meta, :content, :title, :name, :template, :base_dir, :permalink, :filename
 
 		def initialize(page)
+			@filename = page
 			@base_dir = File.basename page, File.extname(page)
 			@page = File.join Settings::PAGES_DIR, page
 			@meta = YAML.load_file(@page)
@@ -25,6 +26,7 @@ module Striker
 			data['url'] = page_url
 			data['thumbnail'] = self.image.thumbnail
 			data['name'] = self.name
+			data['filename'] = self.filename
 			data['base_dir'] = self.base_dir
 			data['images'] = self.image.all
 
