@@ -54,7 +54,7 @@ This creates a page named `home.md` in `pages/`. The content is written in [mark
 
 		### Home Page
 
-You can include any front-matter, but `title` and `template` are mandatory fields
+You can include any front-matter, but `title`, `date` and `template` are mandatory fields
 
 The value that you specified for the `template` field, tells the gem to look for a file named `page.html` in the `templates/` directory. Here you can specify the markup of your page.
 
@@ -66,7 +66,7 @@ To define a new template add a file called `my_template.html` in `templates/` an
 Make sure you have [ImageMagick](http://www.imagemagick.org/script/index.php) installed.
 
 ##### Add thumbnail to a page.
-If you would like to make an image appear on one of your pages, simply add an image named as thumbnail.(jpg|png|gif) to the images directory of your page.
+If you would like to make an image appear on one of your pages, simply add an image named as `thumbnail.(jpg|png|gif)` to the images directory of your page.
 Eg.: If you would like to add a thumbnail to your home page, place a `thumbnail.jpg` in `images/home/thumbnail.jpg`
 
 Then in your `home.md` you can use the custom liquid tag helper to output the image by doing:
