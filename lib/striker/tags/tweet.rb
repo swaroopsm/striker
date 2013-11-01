@@ -4,11 +4,10 @@ module Striker
 
 			def initialize(tag, markup, tokens)
 				super
-				match = markup.match /\s?#\[([\w\-~$^*!?.:;+=\s]+)\]\s?@\[([\w\-~$^*!?.:;+=\s]+)\]/
-				if match
-					@hashtags = match[1].gsub(" ", ",")
-					@mentions = match[2].gsub(" ", ",")
-				end
+				hashtags = markup.match /\s?#\[([\w\-~$^*!?.:;+=\s]+)\]/
+				mentions = markup.match /\s?@\[([\w\-~$^*!?.:;+=\s]+)\]/
+				@hashtags = hashtags[1].gsub(" ", ",") unless hashtags.nil?
+				@mentions = mentions[1].gsub(" ", ",") unless mentions.nil?
 			end
 
 			def render(context)
