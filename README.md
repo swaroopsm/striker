@@ -148,6 +148,10 @@ To access a specific archive in your archive templates use the following:
 	{% endfor %}
 
 ##### Helper Tags Available:
+*Share current page on twitter*
+#
+	{% tweet #[hashtag1 hashtag2 hashtag3] @[mention1 mention2 mention3] %}
+
 *Embed YouTube Video*
 #####
 	{% youtube bNAyPK2O4fk 650w 400h %}
