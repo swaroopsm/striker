@@ -1,6 +1,6 @@
 name: Your Website Name
 port: 1619
-basename: /
+basepath: /
 assets: assets
 public_dir: public
 permalink:
