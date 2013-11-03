@@ -10,6 +10,7 @@ module Striker
 				server = WEBrick::HTTPServer.new(:Port => port, :DocumentRoot => root)
 
 				trap 'INT' do server.shutdown end
+				p "Site running at: #{File.join("http://localhost:#{port}", Settings::CONFIG['basepath'])}"
 				server.start
 			end
 
