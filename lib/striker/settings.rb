@@ -6,7 +6,6 @@ module Striker
 		PAGES_DIR      = File.join(SOURCE_DIR, 'pages')
 		TEMPLATES_DIR  = File.join(SOURCE_DIR, 'templates')
 		MEDIA_DIR      = File.join(SOURCE_DIR, 'media')
-		PUBLIC_DIR 		 = File.join(SOURCE_DIR, 'public')
 
 		# Templates path for new page generation
 		PAGES_TEMPLATE  = File.expand_path(File.join('../command/templates'), __FILE__)
@@ -15,6 +14,7 @@ module Striker
 		if File.exists? File.join SOURCE_DIR, 'config.yml'
 			CONFIG = YAML.load_file(File.join(SOURCE_DIR, 'config.yml'))
 
+			PUBLIC_DIR 		 = File.join(SOURCE_DIR, CONFIG['destination'])
 
 			BASEPATH 		 = File.join(PUBLIC_DIR, CONFIG['basepath'])
 
