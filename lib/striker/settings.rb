@@ -15,7 +15,10 @@ module Striker
 		if File.exists? File.join SOURCE_DIR, 'config.yml'
 			CONFIG = YAML.load_file(File.join(SOURCE_DIR, 'config.yml'))
 
-			ASSETS_DIR		 = File.join(PUBLIC_DIR, CONFIG['assets'])
+
+			BASEPATH 		 = File.join(PUBLIC_DIR, CONFIG['basepath'])
+
+			ASSETS_DIR	 = File.join(BASEPATH, CONFIG['assets'])
 		end
 
 	end
