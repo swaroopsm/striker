@@ -62,7 +62,7 @@ module Striker
 											@name
 										end
 				if Settings::CONFIG['permalink']['pretty']
-					FileUtils.mkdir_p(File.join(Settings::PUBLIC_DIR, filename)) 
+					FileUtils.mkdir_p(File.join(Settings::BASEPATH, filename)) 
 					filename + "/index.html"
 				else
 					filename + ".html"
@@ -74,11 +74,11 @@ module Striker
 
 		def page_url
 			if @permalink.match(/^index.html/)
-				"/"
+				Settings::CONFIG['basepath']
 			elsif @permalink.match(/^([\w-]+)\/(index.html)/)
-				"/#{$1}"
+				Settings::CONFIG['basepath'] + $1
 			else
-				"/#{@permalink}"
+				Settings::CONFIG['basepath'] + @permalink
 			end
 		end
 

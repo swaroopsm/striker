@@ -8,7 +8,7 @@ module Striker
 
 		def self.process(site_meta)
 			@@site_meta = site_meta
-			FileUtils.mkdir_p(File.join(Settings::PUBLIC_DIR, @@dir))
+			FileUtils.mkdir_p(File.join(Settings::BASEPATH, @@dir))
 			process_archive_dir
 			process_files
 		end
@@ -28,10 +28,10 @@ module Striker
 			grouped_pages.each do |p| 
 				if p[0].class == Array
 					date = Date.new(p[0][0].to_i, Date::MONTHNAMES.index(p[0][1]), 1)
-					url = File.join(Settings::CONFIG['basename'], @@dir, date.year.to_s, date.month.to_s)
+					url = File.join(@@dir, date.year.to_s, date.month.to_s)
 				else
 					date = p[0]
-					url = File.join(Settings::CONFIG['basename'], @@dir, date)
+					url = File.join(@@dir, date)
 				end
 				
 				pages << { 'date' => date, 'pages' => p[1], 'url' => url }
@@ -41,7 +41,7 @@ module Striker
 
 		def self.process_archive_dir
 			list_full.each do |archive|
-				Dir.chdir(File.join(Settings::PUBLIC_DIR, @@dir))
+				Dir.chdir(File.join(Settings::BASEPATH, @@dir))
 				if archive['date'].class == Date
 					FileUtils.mkdir_p(File.join(archive['date'].year.to_s, archive['date'].month.to_s))
 				else
@@ -60,8 +60,8 @@ module Striker
 			Dir.chdir(Settings::TEMPLATES_DIR)
 			template = File.read(File.join("archive", "index.html"))
 			parsed_data = Liquid::Template.parse(template).render('site' => @@site_meta, 'archive' => archive)
-			Dir.chdir(Settings::PUBLIC_DIR)
-			File.open(File.join(Settings::PUBLIC_DIR, archive['url'], "index.html"), "w") do |file|
+			Dir.chdir(Settings::BASEPATH)
+			File.open(File.join(Settings::BASEPATH, archive['url'], "index.html"), "w") do |file|
 				file.write(parsed_data)
 			end
 		end

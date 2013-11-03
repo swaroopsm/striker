@@ -23,7 +23,7 @@ module Striker
 						page_image = ImageList.new(File.join(Settings::MEDIA_DIR, "images", @page.base_dir, i)).first
 						image = {
 							'src' => i,
-							'url' => "/#{Settings::CONFIG['assets']}/images/#{@page.name}-#{i}",
+							'url' => File.join(Settings::CONFIG['basepath'], Settings::CONFIG['assets'], "images/#{@page.name}-#{i}"),
 							'content_type' => mime_type(i)
 						}
 						page_image.write File.join(Settings::ASSETS_DIR, 'images', "#{@page.name}-#{i}")
@@ -42,7 +42,11 @@ module Striker
 					full_image = File.join(@dir, thumbnail[0])
 					new_image_name = @page.name + File.extname(full_image)
 
-					{ 'src' => new_image_name, 'content_type' => mime_type(thumbnail[0]), 'url' => File.join('/', Settings::CONFIG['assets'], 'images', new_image_name) }
+					{ 
+						'src' => new_image_name,
+						'content_type' => mime_type(thumbnail[0]),
+						'url' => File.join(Settings::CONFIG['basepath'], Settings::CONFIG['assets'], 'images',new_image_name)
+					}
 				end
 			end
 

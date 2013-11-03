@@ -6,6 +6,7 @@ module Striker
 				FileUtils.rm_rf(File.join Settings::PUBLIC_DIR, ".")
 				FileUtils.mkdir_p(Settings::PUBLIC_DIR)
 				FileUtils.mkdir_p(Settings::ASSETS_DIR)
+				FileUtils.mkdir_p Settings::BASEPATH
 				Settings::CONFIG['include_assets'].each do |d|
 					FileUtils.cp_r(File.join(Settings::SOURCE_DIR, d), Settings::ASSETS_DIR) if File.exists? d
 				end
