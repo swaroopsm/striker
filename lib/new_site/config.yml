@@ -2,7 +2,7 @@ name: Your Website Name
 port: 1619
 basepath: /
 assets: assets
-public_dir: public
+destination: public
 permalink:
   style: :name
   pretty: true
