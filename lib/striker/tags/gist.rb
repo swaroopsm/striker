@@ -4,8 +4,8 @@ module Striker
 
 			def initialize(tag, markup, tokens)
 				super
-				@username = markup.split("/")[0]
-				@file = markup.split("/")[1].strip + ".js"
+				@username = markup.split(" ")[0]
+				@file = markup.split(" ")[1].strip + ".js"
 			end
 
 			def render(context)
