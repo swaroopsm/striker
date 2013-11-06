@@ -17,6 +17,7 @@ module Striker
 			@title = @meta['title']
 			@content = extract_content.post_match
 			@name = @meta['title'].to_url
+			@meta['name'] = @base_dir
 			@permalink = permalink_page
 			@template = @meta['template']
 		end
@@ -53,16 +54,10 @@ module Striker
 
 		def permalink_page
 			unless Settings::CONFIG['homepage'] == @base_dir
-				filename = case Settings::CONFIG['permalink']['style']
-										when :name
-											@base_dir
-										when :title
-											@name
-										else
-											@name
-										end
+				permalink_style = Settings::CONFIG['permalink']['style']
+				filename = permalink_style.split("/").map{ |p| process_permalink(p) }.join("/") unless permalink_style.is_a? Symbol
+				FileUtils.mkdir_p(File.join(Settings::BASEPATH, filename)) 
 				if Settings::CONFIG['permalink']['pretty']
-					FileUtils.mkdir_p(File.join(Settings::BASEPATH, filename)) 
 					filename + "/index.html"
 				else
 					filename + ".html"
@@ -75,11 +70,15 @@ module Striker
 		def page_url
 			if @permalink.match(/^index.html/)
 				File.join Settings::CONFIG['basepath']
-			elsif @permalink.match(/^([\w-]+)\/(index.html)/)
+			elsif @permalink.match(/^([\w\-\/]+)index.html$/)
 				File.join(Settings::CONFIG['basepath'], $1)
 			else
 				File.join(Settings::CONFIG['basepath'], @permalink)
 			end
+		end
+
+		def process_permalink(p)
+			p.match(/^:([\w\-]+)/) ? self.meta[$1].to_s.to_url : p
 		end
 
 	end
