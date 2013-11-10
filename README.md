@@ -181,6 +181,7 @@ To access a specific archive in your archive templates use the following:
 | archive 		| *Adds archive to your blog* <br><br> *style* - The url that you would like to have. For Eg.: To have a archive url like `http://yoursite.com/archive`, then the value for this must be `archive` <br><br> *period* - This can be either `:year` or `:month` for respective urls like: `http://yoursite.com/2013` and `http://yoursite.com/2013/10` |
 | homepage | Make any of the pages in your `pages/` directory your site's homepage. For Eg.: If you have a `home.md` in your `pages/` directory and then add: `homepage: home`. This when compiled creates an `index.html` for your site |
 | include\_assets | Directories that you would like to be compiled into the `assets` directory of your site. |
+| include | Include any directories/files other than pages to be copied into the `public` directory. You need to specify them as an array of files/directories and this would recursively copy everything specified in the directory. A good example would be: <br><br> *include*: <br> - .htaccess |
 
 
 
