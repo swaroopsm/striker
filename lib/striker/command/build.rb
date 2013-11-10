@@ -27,6 +27,11 @@ module Striker
 				Dir.glob(Settings::MEDIA_DIR + "/*").each do |d|
 					FileUtils.mkdir_p File.join(Settings::ASSETS_DIR, d.split("/")[-1]) if File.directory? d
 				end
+				if Settings::CONFIG['include']
+					Settings::CONFIG['include'].each do |file|
+						FileUtils.cp_r(File.join(Settings::SOURCE_DIR, file), Settings::PUBLIC_DIR)
+					end
+				end
 			end
 
 			# Process and convert pages to html
