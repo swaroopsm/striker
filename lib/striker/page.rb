@@ -54,14 +54,18 @@ module Striker
 
 		def permalink_page
 			unless Settings::CONFIG['homepage'] == @base_dir
-				permalink_style = Settings::CONFIG['permalink']['style']
+				permalink_style = self.meta['permalink'] ? self.meta['permalink']['style'] : Settings::CONFIG['permalink']['style']
+				pretty_url = self.meta['permalink'] ? self.meta['permalink']['pretty'] : Settings::CONFIG['permalink']['pretty']
 				filename = permalink_style.split("/").map{ |p| process_permalink(p) }.join("/") unless permalink_style.is_a? Symbol
-				FileUtils.mkdir_p(File.join(Settings::BASEPATH, filename)) 
-				if Settings::CONFIG['permalink']['pretty']
+				if pretty_url
+					FileUtils.mkdir_p(File.join(Settings::BASEPATH, filename))
 					filename + "/index.html"
 				else
+					unpretty_filename = filename.split("/")[0...-1]
+					FileUtils.mkdir_p(File.join(Settings::BASEPATH, unpretty_filename))
 					filename + ".html"
 				end
+				# p filename
 			else
 				"index.html"
 			end
