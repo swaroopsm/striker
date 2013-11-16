@@ -19,7 +19,7 @@ module Striker
 			# Create initial site directories
 			def self.init_dir
 				FileUtils.rm_rf(File.join Settings::PUBLIC_DIR, ".")
-				FileUtils.mkdir_p [ Settings::PUBLIC_DIR, Settings::ASSETS_DIR, Settings::BASEPATH ]
+				FileUtils.mkdir_p [ Settings::BASEPATH, Settings::ASSETS_DIR ]
 				Settings::CONFIG['include_assets'].each do |d|
 					FileUtils.cp_r(File.join(Settings::SOURCE_DIR, d), Settings::ASSETS_DIR) if File.exists? d
 				end
@@ -29,7 +29,7 @@ module Striker
 				end
 				if Settings::CONFIG['include']
 					Settings::CONFIG['include'].each do |file|
-						FileUtils.cp_r(File.join(Settings::SOURCE_DIR, file), Settings::PUBLIC_DIR)
+						FileUtils.cp_r(File.join(Settings::SOURCE_DIR, file), Settings::BASEPATH)
 					end
 				end
 			end
