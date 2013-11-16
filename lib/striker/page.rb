@@ -73,11 +73,11 @@ module Striker
 
 		def page_url
 			if @permalink.match(/^index.html/)
-				File.join Settings::CONFIG['basepath']
+				File.join "/", Settings::CONFIG['basepath']
 			elsif @permalink.match(/^([\w\-\/]+)index.html$/)
-				File.join(Settings::CONFIG['basepath'], $1)
+				File.join("/", Settings::CONFIG['basepath'], $1)
 			else
-				File.join(Settings::CONFIG['basepath'], @permalink)
+				File.join("/", Settings::CONFIG['basepath'], @permalink)
 			end
 		end
 
