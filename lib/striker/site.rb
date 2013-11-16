@@ -17,6 +17,7 @@ module Striker
 
 		def self.meta
 			data = Settings::CONFIG
+			data['basepath'] = File.join "/", data['basepath']
 			data['pages'] = Page.list_full
 			data['tags'] = Tag.list_full
 			data['archive'] = Archive.list_full
