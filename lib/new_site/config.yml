@@ -8,9 +8,7 @@ permalink:
   pretty: true
 tagged:
   style: tagged
-archive:
-  style: archive
-  period: :month
+archive: archive
 homepage: index
 include_assets:
  - css
