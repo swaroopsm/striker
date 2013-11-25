@@ -6,6 +6,7 @@ module Striker
 		PAGES_DIR      = File.join(SOURCE_DIR, 'pages')
 		TEMPLATES_DIR  = File.join(SOURCE_DIR, 'templates')
 		MEDIA_DIR      = File.join(SOURCE_DIR, 'media')
+		PLUGINS_DIR		 = File.join(SOURCE_DIR, '_plugins')
 
 		# Templates path for new page generation
 		PAGES_TEMPLATE  = File.expand_path(File.join('../command/templates'), __FILE__)
