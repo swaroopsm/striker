@@ -24,6 +24,14 @@ require_relative 'striker/tags/soundcloud'
 require_relative 'striker/tags/tweet'
 require_relative 'striker/tags/gist'
 
+# Require custom plugins
+if Dir.exists? Striker::Settings::PLUGINS_DIR
+	Dir.chdir Striker::Settings::PLUGINS_DIR
+	Dir.glob("*.rb").each do |plugin|
+		require File.join Striker::Settings::PLUGINS_DIR, plugin
+	end
+end
+
 module Striker
 
 end
