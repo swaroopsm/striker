@@ -99,12 +99,10 @@ This starts the server at `localhost` and port `1619`
 ##### Adding tags to pages
 In your `config.yml`
 #
-	tagged:
-		style: tagged
+	tagged: tagged
 This specifies the page that you want to serve for tags. For Eg.: if you want something like `http://yoursite.com/tags` change it to the following:
 #
-	tagged:
-		style: tags
+	tagged: tags
 
 To create markup for your templates `striker` provides two files:
 
@@ -121,29 +119,21 @@ Archive of posts is quite commin in blogs. If you would like to add an archive t
 
 In your `config.yml` add the following if it does not exist:
 #
-	archive:
-		style: archive
-		period: :month
-
-The `style` parameter specifies the path name; the above would create `http://yoursite.com/archive/2013/10`
-
-You can provide two values to the `period` parameter - `:year` or `:month`
-
-The `:year` value would create a path like: `http://yoursite.com/archive/2013`
-
-The `:month` value would create a path like: `http://yoursite.com/archive/2013/10`
+	archive: /
+	OR
+	archive: archive_url_name
 
 *Note:*
 
 For the archive to be fully functional and work as expected you need to provide the `date` in the front-matter of all your pages without which can lead to incorrect results.
 
-The templates for specifying the markup are in `templates/archive/index.html`.
+The templates for specifying the markup are in `templates/archive/yearly.html` and `templates/archive/monthly.html`.
 
 To access all site archives you can use `site.archives` in your templates
 
 To access a specific archive in your archive templates use the following:
 #
-	{% for page in archive.pages %}
+	{% for page in pages %}
 		<a href="{{ page.url }}">{{ page.title }}</a>
 	{% endfor %}
 
@@ -178,7 +168,7 @@ To access a specific archive in your archive templates use the following:
 |	destination |	*Directory where the entire site will be compiled to.* |
 |	permalink		| *Appearance of page urls.* <br><br> *style* - This can be either `:title` or `:name`. This creates pages with either the *title* specified in each page or *name* - the page name(eg.: index.md) <br><br> *pretty* - This is used to create pages with .html or not. It can either be `true` - creates a url like: `/about` or `false` - that creates a url like `/about.html` <br><br> You can also override this property by specifying this option in the `yaml front-matter` of your individual pages.|
 | tagged			| *Used for adding tags to a site. Helpful if you are running a blog* <br><br> *style* - If you would like to create a url like `http://yoursite.com/tags` the value for this must be `tags` |
-| archive 		| *Specify the archive style*. For Eg.: To have a archive url like `http://yoursite.com/archive/2013/09/`, then the value for this must be `archive` <br><br>If you would like to ignore a specific page to be listed in the archive you can add `ignore_archive: true` in the `yaml front-matter` of the respective page. <br><br>To have a archive url like `http://yoursite.com/2013/09/`, then the value for this must be `/`|
+| archive 		| *Specify the archive style*. For Eg.: To have a archive url like `http://yoursite.com/archive/2013/09/`, then the value for this must be `archive` <br><br>If you would like to ignore a specific page to be listed in the archive you can add `ignore_archive: true` in the `yaml front-matter` of the respective page. <br><br>To have a archive url like `http://yoursite.com/2013/09/`, then the value for this must be `/` <br><br> To add your content for the `yearly` and `monthly` archive edit the `templates/archive/yearly.html` and `templates/archive/monthly.html` files respectively|
 | homepage | Make any of the pages in your `pages/` directory your site's homepage. For Eg.: If you have a `home.md` in your `pages/` directory and then add: `homepage: home`. This when compiled creates an `index.html` for your site |
 | include\_assets | Directories that you would like to be compiled into the `assets` directory of your site. |
 | include | Include any directories/files other than pages to be copied into the `public` directory. You need to specify them as an array of files/directories and this would recursively copy everything specified in the directory. A good example would be: <br><br> *include*: <br> - .htaccess |
