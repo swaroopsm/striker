@@ -1,0 +1,8 @@
+<h2>{{ year }}</h2>
+<p>
+	{{ months }}
+</p>
+
+{% for page in  pages %}
+	<a href="{{ page.url }}">{{ page.title }}</a> <br>
+{% endfor %}
