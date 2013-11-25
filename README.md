@@ -158,6 +158,20 @@ To access a specific archive in your archive templates use the following:
 #####
 	{% soundcloud 3058346 400w 200h %}
 
+#### Available Page Data
+*Note that all variables configured in the `yaml front-matter` for each page and all site config that is mentioned in the following section is availble with `page` and `site` variables. For Eg.: If you would like to display the page title you can use `{{ page.title }}`. Similarly to display the `site name`, you can use `{{ site.name }}`*
+
+Additional variables provided by `striker` for each page is as follows:
+
+| *Variable* | *Description* |
+| :---:			 | :------			 |
+| name			 | *Name of the page that is url friendly* |
+| url				 | *The full url path of a page* |
+| thumbnail  | *The image source, content-type and the url of the thumbnail for the page* |
+| filename   | *The filename of the page* <br><br>Eg.: If you have a filename called `index.md` in your `pages` directory then the value for this will be `index.md` |
+| base_dir   | *The filename without the extension* |
+| images		 | *List of all images w.r.t a page* |
+
 #### Site Configuration
 | Name			 	|	*Description*			 			|
 | :----: 		 	|	:---------		     			|
@@ -168,7 +182,7 @@ To access a specific archive in your archive templates use the following:
 |	destination |	*Directory where the entire site will be compiled to.* |
 |	permalink		| *Appearance of page urls.* <br><br> *style* - This can be either `:title` or `:name`. This creates pages with either the *title* specified in each page or *name* - the page name(eg.: index.md) <br><br> *pretty* - This is used to create pages with .html or not. It can either be `true` - creates a url like: `/about` or `false` - that creates a url like `/about.html` <br><br> You can also override this property by specifying this option in the `yaml front-matter` of your individual pages.|
 | tagged			| *Used for adding tags to a site. Helpful if you are running a blog* <br><br> *style* - If you would like to create a url like `http://yoursite.com/tags` the value for this must be `tags` |
-| archive 		| *Specify the archive style*. For Eg.: To have a archive url like `http://yoursite.com/archive/2013/09/`, then the value for this must be `archive` <br><br>If you would like to ignore a specific page to be listed in the archive you can add `ignore_archive: true` in the `yaml front-matter` of the respective page. <br><br>To have a archive url like `http://yoursite.com/2013/09/`, then the value for this must be `/` <br><br> To add your content for the `yearly` and `monthly` archive edit the `templates/archive/yearly.html` and `templates/archive/monthly.html` files respectively|
+| archive 		| *Specify the archive style*.<br><br> For Eg.: To have a archive url like `http://yoursite.com/archive/2013/09/`, then the value for this must be `archive` <br><br>If you would like to ignore a specific page to be listed in the archive you can add `ignore_archive: true` in the `yaml front-matter` of the respective page. <br><br>To have a archive url like `http://yoursite.com/2013/09/`, then the value for this must be `/` <br><br> To add your content for the `yearly` and `monthly` archive edit the `templates/archive/yearly.html` and `templates/archive/monthly.html` files respectively|
 | homepage | Make any of the pages in your `pages/` directory your site's homepage. For Eg.: If you have a `home.md` in your `pages/` directory and then add: `homepage: home`. This when compiled creates an `index.html` for your site |
 | include\_assets | Directories that you would like to be compiled into the `assets` directory of your site. |
 | include | Include any directories/files other than pages to be copied into the `public` directory. You need to specify them as an array of files/directories and this would recursively copy everything specified in the directory. A good example would be: <br><br> *include*: <br> - .htaccess |
