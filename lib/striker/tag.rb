@@ -44,7 +44,7 @@ module Striker
 		def self.process(site_meta)
 			@@site_meta = site_meta
 			self.list.each do |tag|
-				FileUtils.mkdir_p(File.join(Settings::BASEPATH, Settings::CONFIG['tagged']['style'], tag))
+				FileUtils.mkdir_p(File.join(Settings::BASEPATH, Settings::CONFIG['tagged'], tag))
 			end
 			process_tags
 		end
@@ -53,7 +53,7 @@ module Striker
 			
 			# Tag index template for tags
 			index_template = File.open(File.join(Settings::TEMPLATES_DIR, "tags/index.html"), "r").read
-			File.open(File.join(Settings::BASEPATH, Settings::CONFIG['tagged']['style'], "index.html"), "w") do |f|
+			File.open(File.join(Settings::BASEPATH, Settings::CONFIG['tagged'], "index.html"), "w") do |f|
 				f.write Liquid::Template.parse(index_template).render(
 					'site' => @@site_meta
 				)
@@ -62,7 +62,7 @@ module Striker
 			# Process each tag
 			template = File.open(File.join(Settings::TEMPLATES_DIR, "tags/tag.html"), "r").read
 			Tag.list.each do |tag|
-				File.open(File.join(Settings::BASEPATH, Settings::CONFIG['tagged']['style'], tag, "index.html"), "w") do |f|
+				File.open(File.join(Settings::BASEPATH, Settings::CONFIG['tagged'], tag, "index.html"), "w") do |f|
 					f.write Liquid::Template.parse(template).render(
 						'site' => @@site_meta,
 						'pages' => Tag.new(tag).pages
