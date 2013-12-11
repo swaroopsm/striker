@@ -19,8 +19,8 @@ module Striker
 			data = Settings::CONFIG
 			data['basepath'] = File.join "/", data['basepath']
 			data['pages'] = Page.list_full
-			data['tags'] = Tag.list_full
-			data['archive'] = Archive.list_full
+			data['tags'] = Tag.list_full if Settings::CONFIG['tagged']
+			data['archive'] = Archive.list_full if Settings::CONFIG['archive']
 			data
 		end
 
