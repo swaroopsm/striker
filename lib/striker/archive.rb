@@ -2,9 +2,11 @@ module Striker
 	class Archive
 		
 		if File.exists? File.join(Settings::SOURCE_DIR, "config.yml")
-			@@dir = Settings::CONFIG['archive'] 
-			@@full_path = File.join Settings::BASEPATH, @@dir
-			@@template_dir = File.join Settings::TEMPLATES_DIR, "archive"
+			if Settings::CONFIG['archive']
+				@@dir = Settings::CONFIG['archive'] 
+				@@full_path = File.join Settings::BASEPATH, @@dir
+				@@template_dir = File.join Settings::TEMPLATES_DIR, "archive"
+			end
 		end
 
 	 	def self.process(site_meta)
@@ -43,7 +45,8 @@ module Striker
 			list_full.each do |archive|
 				Dir.chdir(File.join(Settings::BASEPATH, @@dir))
 				if archive['date'].class == Date
-					FileUtils.mkdir_p(File.join(archive['date'].year.to_s, archive['date'].strftime("%m").to_s))
+					FileUtils.mkdir_p(File.join(archive['date'].year.to_s, archive['date'].strftime("%m")))
+					p File.join(archive['date'].year.to_s, archive['date'].strftime("%m").to_s)
 				else
 					FileUtils.mkdir_p(archive['date'].to_s)
 				end
@@ -65,9 +68,10 @@ module Striker
 				months = page[1].group_by{ |pp| pp['date'].strftime("%m") }.keys.uniq
 				parsed_data = Liquid::Template.parse(template).render('site' => @@site_meta, 'pages' => page[1], 'year' => page[0], 'months' => months)
 
-				File.open(File.join(Settings::BASEPATH, page[0], "index.html"), "w") do |file|
-					file.write(parsed_data)
-				end
+				p File.join(@@full_path, page[0])
+				# File.open(File.join(Settings::BASEPATH, Settings::CONFIG['archive'], page[0], "index.html"), "w") do |file|
+				# 	file.write(parsed_data)
+				# end
 			end
 		end
 
