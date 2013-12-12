@@ -21,6 +21,7 @@ module Striker
 			data['pages'] = Page.list_full
 			data['tags'] = Tag.list_full if Settings::CONFIG['tagged']
 			data['archive'] = Archive.list_full if Settings::CONFIG['archive']
+			data['logo'] = Striker::Media::Image.process_logo
 			data
 		end
 
