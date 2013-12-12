@@ -23,6 +23,7 @@ require_relative 'striker/tags/vimeo'
 require_relative 'striker/tags/soundcloud'
 require_relative 'striker/tags/tweet'
 require_relative 'striker/tags/gist'
+require_relative 'striker/tags/include_tag'
 
 # Require custom plugins
 if Dir.exists? Striker::Settings::PLUGINS_DIR
