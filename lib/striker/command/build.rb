@@ -4,9 +4,9 @@ module Striker
 			
 			def self.process
 
-				@@meta = Site.meta
-
 				init_dir
+
+				@@meta = Site.meta
 
 				process_pages
 
