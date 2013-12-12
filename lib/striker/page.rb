@@ -7,7 +7,7 @@ module Striker
 	class Page
 
 
-		attr_reader :meta, :content, :title, :name, :template, :base_dir, :permalink, :filename
+		attr_reader :meta, :content, :title, :name, :template, :base_dir, :permalink, :filename, :url
 
 		def initialize(page)
 			@filename = page
@@ -20,11 +20,12 @@ module Striker
 			@meta['name'] = @base_dir
 			@permalink = permalink_page
 			@template = @meta['template']
+			@url = page_url
 		end
 		
 		def page_data
 			data = self.meta
-			data['url'] = page_url
+			data['url'] = self.url
 			data['thumbnail'] = self.image.thumbnail
 			data['name'] = self.name
 			data['filename'] = self.filename
