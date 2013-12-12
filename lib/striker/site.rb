@@ -20,7 +20,7 @@ module Striker
 			pages(true).each do |p|
 				page = Page.new(p)
 				if page.meta['sidebar']
-					sidebar_pages << { 'title' => page.title, 'url' => page.url, 'base_dir' => page.base_dir }
+					sidebar_pages << { 'title' => page.title, 'url' => page.url, 'base_dir' => page.base_dir, 'position' => page.meta['sidebar']['position'] }
 				end
 			end
 			sidebar_pages
