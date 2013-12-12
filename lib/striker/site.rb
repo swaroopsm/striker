@@ -23,7 +23,7 @@ module Striker
 					sidebar_pages << { 'title' => page.title, 'url' => page.url, 'base_dir' => page.base_dir, 'position' => page.meta['sidebar']['position'] }
 				end
 			end
-			sidebar_pages
+			sidebar_pages.sort_by{ |k,v| k['position'] }
 		end
 
 		def self.meta
