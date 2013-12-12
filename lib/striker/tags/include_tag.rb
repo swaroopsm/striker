@@ -10,7 +10,11 @@ module Striker
 
 			def render(context)
 				Dir.chdir @includes_dir
-				File.read(@file)
+				template = File.read(@file)
+				Liquid::Template.parse(template).render(
+					'site' => Site.meta,
+					'page' => context.environments[0]['page']
+				)
 			end
 
 		end
