@@ -17,9 +17,11 @@ module Striker
 
 			PUBLIC_DIR 		 = File.join(SOURCE_DIR, CONFIG['destination'])
 
-			BASEPATH 		 = File.join(PUBLIC_DIR, CONFIG['basepath'])
+			BASEPATH 			 = File.join(PUBLIC_DIR, CONFIG['basepath'])
 
-			ASSETS_DIR	 = File.join(BASEPATH, CONFIG['assets'])
+			ASSETS_DIR	 	 = File.join(BASEPATH, CONFIG['assets'])
+
+			BASEURL 			 = File.join(CONFIG['basepath'])
 		end
 
 	end
