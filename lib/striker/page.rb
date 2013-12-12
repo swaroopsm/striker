@@ -48,6 +48,10 @@ module Striker
 			pages
 		end
 
+		def sections
+			process_sections
+		end
+
 		private
 		def extract_content
 			File.open(@page, 'r').read.match(/^(?<headers>---\s*\n.*?\n?)^(---\s*$\n?)/m)
@@ -66,7 +70,6 @@ module Striker
 					FileUtils.mkdir_p(File.join(Settings::BASEPATH, unpretty_filename))
 					filename + ".html"
 				end
-				# p filename
 			else
 				"index.html"
 			end
@@ -84,6 +87,22 @@ module Striker
 
 		def process_permalink(p)
 			p.match(/^:([\w\-]+)/) ? self.meta[$1].to_s.to_url : p
+		end
+
+		def extract_sections
+			sections = @content.scan /\{\% section(.*) \%\}/
+			sections.flatten!.map!{ |s| s.strip }
+		end
+
+		def process_sections
+			sections = []
+			extract_sections.each do |section|
+				match = @content.match /^\{\% section #{section} \%\}(.+)\{\% endsection #{section} \%\}$/m
+				if match
+					sections << { 'name' => section, 'content' => $1 }
+				end
+			end
+			sections
 		end
 
 	end
