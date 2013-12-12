@@ -69,6 +69,24 @@ module Striker
 				image
 			end
 
+			# Processes Site Logo
+			def self.process_logo
+				logo = nil
+				FileUtils.chdir File.join(Settings::MEDIA_DIR, "images")
+				Dir.glob("*.{jpg,jpeg,bmp,gif,png,svg}").each do |i|
+					if i.match(/^logo.(jpg|jpeg|bmp|gif|png|svg)/)
+						logo = "logo." + $1
+						break
+					end
+				end
+				if logo
+					FileUtils.cp(logo, File.join(Settings::ASSETS_DIR, "images"))
+	 				File.join Settings::BASEURL, Settings::CONFIG['assets'], "images", logo
+				else
+					logo
+				end
+			end
+
 			private
 			def entries
 				entries = []
