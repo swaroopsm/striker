@@ -91,7 +91,7 @@ module Striker
 
 		def extract_sections
 			sections = @content.scan /\{\% section(.*) \%\}/
-			sections.flatten!.map!{ |s| s.strip }
+			sections.size > 0 ? sections.flatten!.map!{ |s| s.strip } : []
 		end
 
 		def process_sections
