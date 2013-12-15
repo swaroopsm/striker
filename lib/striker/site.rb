@@ -39,12 +39,14 @@ module Striker
 		def self.meta
 			data = Settings::CONFIG
 			data['basepath'] = File.join "/", data['basepath']
+			data['assets'] = File.join "/", Settings::BASEURL, Settings::CONFIG['assets']
 			data['pages'] = Page.list_full
 			data['tags'] = Tag.list_full if Settings::CONFIG['tagged']
 			data['archive'] = Archive.list_full if Settings::CONFIG['archive']
 			data['logo'] = Striker::Media::Image.process_logo
 			data['sidebar'] = sidebar
 			data['links'] = links
+			data['gallery'] = Media::Image.gallery
 			data
 		end
 
