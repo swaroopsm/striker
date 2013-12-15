@@ -90,8 +90,8 @@ module Striker
 			## For gallery
 			def self.gallerize
 				Dir.chdir Settings::GALLERY_DIR
-				main_width, main_height = Settings::CONFIG['gallery']['main'].split("X")
-				thumb_width, thumb_height = Settings::CONFIG['gallery']['thumb'].split("X")
+				main_width, main_height = Settings::CONFIG['gallerize']['main'].split("X")
+				thumb_width, thumb_height = Settings::CONFIG['gallerize']['thumb'].split("X")
 				Dir.glob("*").each_with_index do |file, counter|
 					image = Magick::Image.read(file).first
 					thumbnail = image.resize_to_fit thumb_width.to_i, thumb_height.to_i
@@ -109,14 +109,14 @@ module Striker
 			def self.gallery
 				images = []
 				Dir.chdir File.join(Settings::ASSETS_DIR, "images")
-				thumb_re = /^gallery-thumb-/
-				main_re = /^gallery-main-/
-				Dir.glob("gallery-*").each do |g|
-					thumb = g if g.match(thumb_re)
-					main = g if g.match(main_re)
-					images << { 'thumbnail' => thumb, 'main' => main }
+				Dir.glob("gallery-*").sort.each_slice(2) do |g|
+					images << { 'thumbnail' => urlize(g[1]), 'main' => urlize(g[0]) }
 				end
 				images
+			end
+
+			def self.urlize(image)
+				File.join(Settings::BASEURL, Settings::CONFIG['assets'], "images", image)
 			end
 
 			private
