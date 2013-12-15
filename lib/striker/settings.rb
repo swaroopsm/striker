@@ -22,6 +22,10 @@ module Striker
 			ASSETS_DIR	 	 = File.join(BASEPATH, CONFIG['assets'])
 
 			BASEURL 			 = File.join(CONFIG['basepath'])
+
+			if CONFIG['gallery']
+				GALLERY_DIR  = File.join(SOURCE_DIR, '_gallery')
+			end
 		end
 
 	end
