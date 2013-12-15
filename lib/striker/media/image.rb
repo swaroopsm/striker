@@ -87,6 +87,38 @@ module Striker
 				end
 			end
 
+			## For gallery
+			def self.gallerize
+				Dir.chdir Settings::GALLERY_DIR
+				main_width, main_height = Settings::CONFIG['gallery']['main'].split("X")
+				thumb_width, thumb_height = Settings::CONFIG['gallery']['thumb'].split("X")
+				Dir.glob("*").each_with_index do |file, counter|
+					image = Magick::Image.read(file).first
+					thumbnail = image.resize_to_fit thumb_width.to_i, thumb_height.to_i
+					thumbnail.write(File.join(Settings::ASSETS_DIR, "images", "gallery-#{counter}-thumb-#{file}")) do 
+						self.quality = 75
+					end
+					
+					main = image.resize_to_fit main_width.to_i, main_height.to_i
+					main.write(File.join(Settings::ASSETS_DIR, "images", "gallery-#{counter}-main-#{file}")) do
+						self.quality = 60
+					end
+				end
+			end
+
+			def self.gallery
+				images = []
+				Dir.chdir File.join(Settings::ASSETS_DIR, "images")
+				thumb_re = /^gallery-thumb-/
+				main_re = /^gallery-main-/
+				Dir.glob("gallery-*").each do |g|
+					thumb = g if g.match(thumb_re)
+					main = g if g.match(main_re)
+					images << { 'thumbnail' => thumb, 'main' => main }
+				end
+				images
+			end
+
 			private
 			def entries
 				entries = []
