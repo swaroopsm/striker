@@ -26,6 +26,16 @@ module Striker
 			sidebar_pages.sort_by{ |k,v| k['position'] }
 		end
 
+		# Returns all page links for the site
+		def self.links
+			links = {}
+			pages(true).each do |p|
+				page = Page.new(p)
+				links[page.base_dir] = page.url
+			end
+			links
+		end
+
 		def self.meta
 			data = Settings::CONFIG
 			data['basepath'] = File.join "/", data['basepath']
@@ -34,6 +44,7 @@ module Striker
 			data['archive'] = Archive.list_full if Settings::CONFIG['archive']
 			data['logo'] = Striker::Media::Image.process_logo
 			data['sidebar'] = sidebar
+			data['links'] = links
 			data
 		end
 
