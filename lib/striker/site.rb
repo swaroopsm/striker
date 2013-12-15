@@ -1,9 +1,15 @@
 module Striker
 	class Site
 
-		def self.pages(ext=false)
+		attr_reader :site_defaults
+
+		def initialize(settings)
+			@site_defaults = settings
+		end
+
+		def pages(ext=false)
 			pages = []
-			Dir.entries(Settings::PAGES_DIR).each do |page|
+			Dir.entries(@site_defaults.pages_dir).each do |page|
 				unless page == '.' or page == '..'
 					if ext
 						pages << page 
@@ -15,10 +21,27 @@ module Striker
 			pages
 		end
 
-		def self.sidebar
+		def logo
+			logo = nil
+			FileUtils.chdir File.join(@site_defaults.media_dir, "images")
+			Dir.glob("*.{jpg,jpeg,bmp,gif,png,svg}").each do |i|
+				if i.match(/^logo.(jpg|jpeg|bmp|gif|png|svg)/)
+					logo = "logo." + $1
+					break
+				end
+			end
+			if logo
+				FileUtils.cp(logo, File.join(@site_defaults.assets_dir, "images"))
+				File.join @site_defaults.baseurl, @site_defaults.config['assets'], "images", logo
+			else
+				logo
+			end
+		end
+
+		def sidebar
 			sidebar_pages = []
-			pages(true).each do |p|
-				page = Page.new(p)
+			self.pages(true).each do |p|
+				page = Page.new(p, { :site_defaults => @site_defaults })
 				if page.meta['sidebar']
 					sidebar_pages << { 'title' => page.title, 'url' => page.url, 'base_dir' => page.base_dir, 'position' => page.meta['sidebar']['position'] }
 				end
@@ -27,26 +50,27 @@ module Striker
 		end
 
 		# Returns all page links for the site
-		def self.links
+		def links
 			links = {}
-			pages(true).each do |p|
-				page = Page.new(p)
+			self.pages(true).each do |p|
+				page = Page.new(p, { :site_defaults => @site_defaults })
 				links[page.base_dir] = page.url
 			end
 			links
 		end
 
-		def self.meta
-			data = Settings::CONFIG
+		def meta
+			data = self.site_defaults.config
+			data['source'] = self.site_defaults.source
 			data['basepath'] = File.join "/", data['basepath']
-			data['assets'] = File.join "/", Settings::BASEURL, Settings::CONFIG['assets']
-			data['pages'] = Page.list_full
-			data['tags'] = Tag.list_full if Settings::CONFIG['tagged']
-			data['archive'] = Archive.list_full if Settings::CONFIG['archive']
-			data['logo'] = Striker::Media::Image.process_logo
-			data['sidebar'] = sidebar
-			data['links'] = links
-			data['gallery'] = Media::Image.gallery
+			data['assets'] = File.join "/", @site_defaults.baseurl, @site_defaults.config['assets']
+			data['pages'] = self.pages(true) #Page.list_full
+			data['tags'] = Tag.list_full if @site_defaults.config['tagged']
+			data['archive'] = Archive.new(@site_defaults).list_full if @site_defaults.config['archive']
+			data['logo'] = self.logo
+			data['sidebar'] = self.sidebar
+			data['links'] = self.links
+			# data['gallery'] = Media::Image.gallery
 			data
 		end
 

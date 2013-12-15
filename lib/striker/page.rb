@@ -4,15 +4,16 @@ require 'safe_yaml'
 SafeYAML::OPTIONS[:default_mode] = :safe
 
 module Striker
-	class Page
+	class Page < Site
 
 
 		attr_reader :meta, :content, :title, :name, :template, :base_dir, :permalink, :filename, :url
 
-		def initialize(page)
+		def initialize(page, options={})
+			super(options[:site_defaults])
 			@filename = page
 			@base_dir = File.basename page, File.extname(page)
-			@page = File.join Settings::PAGES_DIR, page
+			@page = File.join self.site_defaults.pages_dir, page
 			@meta = YAML.load_file(@page)
 			@title = @meta['title']
 			@content = extract_content.post_match
@@ -40,12 +41,12 @@ module Striker
 		end
 
 		def self.list_full
-			pages = []
-			Dir.chdir(Settings::PAGES_DIR)
-			Dir.glob("*[.md|markdown]").each do |page|
-				pages << Page.new(page).page_data
-			end
-			pages
+			# pages = []
+			# Dir.chdir(Settings::PAGES_DIR)
+			# Dir.glob("*[.md|markdown]").each do |page|
+			# 	pages << Page.new(page).page_data
+			# end
+			# pages
 		end
 
 		def sections
@@ -58,16 +59,16 @@ module Striker
 		end
 
 		def permalink_page
-			unless Settings::CONFIG['homepage'] == @base_dir
-				permalink_style = self.meta['permalink'] ? self.meta['permalink']['style'] : Settings::CONFIG['permalink']['style']
-				pretty_url = self.meta['permalink'] ? self.meta['permalink']['pretty'] : Settings::CONFIG['permalink']['pretty']
+			unless self.site_defaults.config['homepage'] == @base_dir
+				permalink_style = self.meta['permalink'] ? self.meta['permalink']['style'] : self.site_defaults.config['permalink']['style']
+				pretty_url = self.meta['permalink'] ? self.meta['permalink']['pretty'] : self.site_defaults.config['permalink']['pretty']
 				filename = permalink_style.split("/").map{ |p| process_permalink(p) }.join("/") unless permalink_style.is_a? Symbol
 				if pretty_url
-					FileUtils.mkdir_p(File.join(Settings::BASEPATH, filename))
+					FileUtils.mkdir_p(File.join(self.site_defaults.basepath, filename))
 					filename + "/index.html"
 				else
 					unpretty_filename = filename.split("/")[0...-1]
-					FileUtils.mkdir_p(File.join(Settings::BASEPATH, unpretty_filename))
+					FileUtils.mkdir_p(File.join(self.site_defaults.basepath, unpretty_filename))
 					filename + ".html"
 				end
 			else
@@ -77,11 +78,11 @@ module Striker
 
 		def page_url
 			if @permalink.match(/^index.html/)
-				File.join "/", Settings::CONFIG['basepath']
+				File.join "/", self.site_defaults.config['basepath']
 			elsif @permalink.match(/^([\w\-\/]+)index.html$/)
-				File.join("/", Settings::CONFIG['basepath'], $1)
+				File.join("/", self.site_defaults.config['basepath'], $1)
 			else
-				File.join("/", Settings::CONFIG['basepath'], @permalink)
+				File.join("/", self.site_defaults.config['basepath'], @permalink)
 			end
 		end
 

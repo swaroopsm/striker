@@ -2,7 +2,7 @@ require 'RMagick'
 
 module Striker
 	module Media
-		class Image
+		class Image < Site
 
 			include Magick
 
@@ -11,7 +11,7 @@ module Striker
 
 			def initialize(page, image_options={})
 				@page = page
-				@dir = File.join(Settings::MEDIA_DIR, "images", page.base_dir) if @page
+				@dir = File.join(@page.site_defaults.media_dir, "images", page.base_dir) if @page
 				@image_options = image_options
 			end
 
@@ -20,14 +20,14 @@ module Striker
 				images = []
 				entries.each do |i|
 					if i.match(/\.(jpg|jpeg|bmp|gif|png|svg)$/i) and not i.match(/^thumbnail\.(jpg|jpeg|bmp|gif|png|svg)/i)
-						page_image = File.join(Settings::MEDIA_DIR, "images", @page.base_dir, i)
+						page_image = File.join(@page.site_defaults.media_dir, "images", @page.base_dir, i)
 						image = {
 							'src' => i,
-							'url' => File.join(Settings::CONFIG['basepath'], Settings::CONFIG['assets'], "images/#{@page.name}-#{i}"),
+							'url' => File.join(@page.site_defaults.config['basepath'], @page.site_defaults.config['assets'], "images/#{@page.name}-#{i}"),
 							'content_type' => mime_type(i)
 						}
-						if Dir.exists? File.join(Settings::ASSETS_DIR, 'images')
-							FileUtils.cp_r page_image, File.join(Settings::ASSETS_DIR, 'images', "#{@page.name}-#{i}")
+						if Dir.exists? File.join(@page.site_defaults.assets_dir, 'images')
+							FileUtils.cp_r page_image, File.join(@page.site_defaults.assets_dir, 'images', "#{@page.name}-#{i}")
 						end
 						images << image
 					end
@@ -47,17 +47,17 @@ module Striker
 					{ 
 						'src' => new_image_name,
 						'content_type' => mime_type(thumbnail[0]),
-						'url' => File.join(Settings::CONFIG['basepath'], Settings::CONFIG['assets'], 'images',new_image_name)
+						'url' => File.join(@page.site_defaults.config['basepath'], @page.site_defaults.config['assets'], 'images',new_image_name)
 					}
 				end
 			end
 
 			def thumbnailize
-				base_dir = File.join(Settings::MEDIA_DIR, 'images', @image_options[:context]['base_dir'])
+				base_dir = File.join(@page.site_defaults::MEDIA_DIR, 'images', @image_options[:context]['base_dir'])
 				src = @image_options[:context]['thumbnail']['src']
 				image = ImageList.new(File.join(base_dir, "thumbnail#{File.extname src}")).first
 				resized_image = self.process_resize(image)
-				resized_image.write File.join(Settings::ASSETS_DIR, 'images', src)
+				resized_image.write File.join(@page.site_defaults.assets_dir, 'images', src)
 			end
 
 			def process_resize(image)
@@ -69,38 +69,20 @@ module Striker
 				image
 			end
 
-			# Processes Site Logo
-			def self.process_logo
-				logo = nil
-				FileUtils.chdir File.join(Settings::MEDIA_DIR, "images")
-				Dir.glob("*.{jpg,jpeg,bmp,gif,png,svg}").each do |i|
-					if i.match(/^logo.(jpg|jpeg|bmp|gif|png|svg)/)
-						logo = "logo." + $1
-						break
-					end
-				end
-				if logo
-					FileUtils.cp(logo, File.join(Settings::ASSETS_DIR, "images"))
-	 				File.join Settings::BASEURL, Settings::CONFIG['assets'], "images", logo
-				else
-					logo
-				end
-			end
-
 			## For gallery
 			def self.gallerize
-				Dir.chdir Settings::GALLERY_DIR
-				main_width, main_height = Settings::CONFIG['gallerize']['main'].split("X")
-				thumb_width, thumb_height = Settings::CONFIG['gallerize']['thumb'].split("X")
+				Dir.chdir @page.site_defaults::GALLERY_DIR
+				main_width, main_height = @page.site_defaults.config['gallerize']['main'].split("X")
+				thumb_width, thumb_height = @page.site_defaults.config['gallerize']['thumb'].split("X")
 				Dir.glob("*").each_with_index do |file, counter|
 					image = Magick::Image.read(file).first
 					thumbnail = image.resize_to_fit thumb_width.to_i, thumb_height.to_i
-					thumbnail.write(File.join(Settings::ASSETS_DIR, "images", "gallery-#{counter}-thumb-#{file}")) do 
+					thumbnail.write(File.join(@page.site_defaults.assets_dir, "images", "gallery-#{counter}-thumb-#{file}")) do 
 						self.quality = 75
 					end
 					
 					main = image.resize_to_fit main_width.to_i, main_height.to_i
-					main.write(File.join(Settings::ASSETS_DIR, "images", "gallery-#{counter}-main-#{file}")) do
+					main.write(File.join(@page.site_defaults.assets_dir, "images", "gallery-#{counter}-main-#{file}")) do
 						self.quality = 60
 					end
 				end
@@ -108,7 +90,7 @@ module Striker
 
 			def self.gallery
 				images = []
-				Dir.chdir File.join(Settings::ASSETS_DIR, "images")
+				Dir.chdir File.join(@page.site_defaults.assets_dir, "images")
 				Dir.glob("gallery-*").sort.each_slice(2) do |g|
 					images << { 'thumbnail' => urlize(g[1]), 'main' => urlize(g[0]) }
 				end
@@ -116,7 +98,7 @@ module Striker
 			end
 
 			def self.urlize(image)
-				File.join(Settings::BASEURL, Settings::CONFIG['assets'], "images", image)
+				File.join(@page.site_defaults::BASEURL, @page.site_defaults.config['assets'], "images", image)
 			end
 
 			private

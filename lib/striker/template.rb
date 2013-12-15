@@ -11,8 +11,8 @@ module Striker
 		end
 
 		def process
-			template = File.open(File.join(Settings::TEMPLATES_DIR, "#{@page.template}.html"), 'r').read
-			File.open(File.join(Settings::BASEPATH, "#{@page.permalink}"), 'w') do |f|
+			template = File.open(File.join(@page.site_defaults.templates_dir, "#{@page.template}.html"), 'r').read
+			File.open(File.join(@page.site_defaults.basepath, "#{@page.permalink}"), 'w') do |f|
 				f.write Liquid::Template.parse(template).render(
 					'content' => parsed_content(@page.content), 
 					'page' => @page.page_data,

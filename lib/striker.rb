@@ -26,14 +26,21 @@ require_relative 'striker/tags/gist'
 require_relative 'striker/tags/include_tag'
 require_relative 'striker/blocks/section'
 
-# Require custom plugins
-if Dir.exists? Striker::Settings::PLUGINS_DIR
-	Dir.chdir Striker::Settings::PLUGINS_DIR
-	Dir.glob("*.rb").each do |plugin|
-		require File.join Striker::Settings::PLUGINS_DIR, plugin
-	end
-end
-
 module Striker
+
+# Initial Setup
+	def self.configure(settings)
+
+		plugins_dir = settings.plugins_dir
+
+		# Require custom plugins
+		if Dir.exists? plugins_dir
+			Dir.chdir plugins_dir
+			Dir.glob("*.rb").each do |plugin|
+				require File.join plugins_dir, plugin
+			end
+		end
+
+	end
 
 end

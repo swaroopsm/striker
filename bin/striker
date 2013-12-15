@@ -42,7 +42,7 @@ command :build do |c|
 
 	c.action do |args, options|
 
-		Striker::Command::Build.process
+		Striker::Command::Build.new(Dir.pwd).process
 	end
 end
 
@@ -52,7 +52,10 @@ command :strike do |c|
 
 	c.action do |args, options|
 		
-		Striker::Command::Build.process
-		Striker::Command::Strike.run(args, options)
+		@striker = Striker::Command::Build.new(Dir.pwd)
+
+		@striker.process
+
+		@striker.serve
 	end
 end

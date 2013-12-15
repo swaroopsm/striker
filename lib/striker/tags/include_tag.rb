@@ -5,14 +5,13 @@ module Striker
 			def initialize(tag, markup, tokens)
 				super
 				@file = markup.strip + ".html"
-				@includes_dir = File.join Settings::SOURCE_DIR, "includes"
 			end
 
 			def render(context)
-				Dir.chdir @includes_dir
+				Dir.chdir File.join( context.environments[0]['site'].source, "includes" )
 				template = File.read(@file)
 				Liquid::Template.parse(template).render(
-					'site' => Site.meta,
+					'site' => context.environments[0]['site'].config,
 					'page' => context.environments[0]['page']
 				)
 			end

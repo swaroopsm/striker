@@ -1,39 +1,43 @@
 module Striker
 	class Archive
+
+		def initialize(settings)
+			@settings = settings
 		
-		if File.exists? File.join(Settings::SOURCE_DIR, "config.yml")
-			if Settings::CONFIG['archive']
-				@@dir = Settings::CONFIG['archive'] 
-				@@full_path = File.join Settings::BASEPATH, @@dir
-				@@template_dir = File.join Settings::TEMPLATES_DIR, "archive"
+			if File.exists? File.join(@settings.source, "config.yml")
+				if @settings.config['archive']
+					@dir = @settings.config['archive'] 
+					@full_path = File.join @settings.basepath, @dir
+					@template_dir = File.join @settings.templates_dir, "archive"
+				end
 			end
 		end
 
-	 	def self.process(site_meta)
-			@@site_meta = site_meta
-			FileUtils.mkdir_p(File.join(Settings::BASEPATH, @@dir))
+	 	def process(site_meta)
+			@site_meta = site_meta
+			FileUtils.mkdir_p(File.join(@settings::basepath, @dir))
 			process_archive_dir
 			process_files
 		end
 
-		def self.list_full
+		def list_full
 			grouped_pages = []
 			pages = []
-			Dir.chdir(Settings::PAGES_DIR)
+			Dir.chdir(@settings.pages_dir)
 			Dir.glob("*[.md|.markdown]").each do |page|
 				p = Page.new(page)
 				# Ignore archive if set in page front matter
 				grouped_pages << p.page_data unless p.meta['ignore_archive']
 			end
 			grouped_year_month_pages = grouped_pages.group_by{ |page| [ page['date'].strftime("%Y"), page['date'].strftime("%m") ] }
-			@@yearly_pages = grouped_pages.group_by{ |page| page['date'].strftime("%Y") }
+			@yearly_pages = grouped_pages.group_by{ |page| page['date'].strftime("%Y") }
 			grouped_year_month_pages.each do |p| 
 				if p[0].class == Array
 					date = Date.new(p[0][0].to_i, p[0][1].to_i, 1)
-					url = File.join(@@dir, date.year.to_s, date.strftime("%m"))
+					url = File.join(@dir, date.year.to_s, date.strftime("%m"))
 				else
 					date = p[0]
-					url = File.join(@@dir, date)
+					url = File.join(@dir, date)
 				end
 				
 				pages << { 'date' => date, 'pages' => p[1], 'url' => url }
@@ -41,52 +45,53 @@ module Striker
 			pages
 		end
 
-		def self.process_archive_dir
-			list_full.each do |archive|
-				Dir.chdir(File.join(Settings::BASEPATH, @@dir))
+		private
+		def process_archive_dir
+			self.list_full.each do |archive|
+				Dir.chdir(File.join(@settings.basepath, @dir))
 				if archive['date'].class == Date
 					FileUtils.mkdir_p(File.join(archive['date'].year.to_s, archive['date'].strftime("%m")))
-					p File.join(archive['date'].year.to_s, archive['date'].strftime("%m").to_s)
+					# p File.join(archive['date'].year.to_s, archive['date'].strftime("%m").to_s)
 				else
 					FileUtils.mkdir_p(archive['date'].to_s)
 				end
 			end
 		end
 
-		def self.process_files
+		def process_files
 
 			# Process monthly archive
-			@@site_meta['archive'].each do |archive|
+			@site_meta['archive'].each do |archive|
 				process_main_template(archive)
 			end
 
 			# Process yearly archive
-			Dir.chdir @@template_dir
-			@@yearly_pages.each do |page|
+			Dir.chdir @settings.templates_dir
+			@yearly_pages.each do |page|
 
 				template = File.read("yearly.html")
 				months = page[1].group_by{ |pp| pp['date'].strftime("%m") }.keys.uniq
-				parsed_data = Liquid::Template.parse(template).render('site' => @@site_meta, 'pages' => page[1], 'year' => page[0], 'months' => months)
+				parsed_data = Liquid::Template.parse(template).render('site' => @site_meta, 'pages' => page[1], 'year' => page[0], 'months' => months)
 
-				p File.join(@@full_path, page[0])
-				# File.open(File.join(Settings::BASEPATH, Settings::CONFIG['archive'], page[0], "index.html"), "w") do |file|
+				p File.join(@full_path, page[0])
+				# File.open(File.join(@settings::basepath, @settings::CONFIG['archive'], page[0], "index.html"), "w") do |file|
 				# 	file.write(parsed_data)
 				# end
 			end
 		end
 
-		def self.process_main_template(archive)
-			Dir.chdir(Settings::TEMPLATES_DIR)
+		def process_main_template(archive)
+			Dir.chdir(@settings.templates_dir)
 
 			template = File.read(File.join("archive", "monthly.html"))
-			parsed_data = Liquid::Template.parse(template).render('site' => @@site_meta, 'pages' => archive['pages'])
-			Dir.chdir(Settings::BASEPATH)
-			File.open(File.join(Settings::BASEPATH, archive['url'], "index.html"), "w") do |file|
+			parsed_data = Liquid::Template.parse(template).render('site' => @site_meta, 'pages' => archive['pages'])
+			Dir.chdir(@settings.basepath)
+			File.open(File.join(@settings.basepath, archive['url'], "index.html"), "w") do |file|
 				file.write(parsed_data)
 			end
 		end
 
-		private_class_method :process_archive_dir, :process_files, :process_main_template
+		# private_class_method :process_archive_dir, :process_files, :process_main_template
 
 	end
 end
