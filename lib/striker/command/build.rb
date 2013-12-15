@@ -6,6 +6,8 @@ module Striker
 
 				init_dir
 
+				process_for_site
+
 				@@meta = Site.meta
 
 				process_pages
@@ -21,7 +23,7 @@ module Striker
 				FileUtils.rm_rf(File.join Settings::PUBLIC_DIR, ".")
 				FileUtils.mkdir_p [ Settings::BASEPATH, Settings::ASSETS_DIR ]
 				Settings::CONFIG['include_assets'].each do |d|
-					FileUtils.cp_r(File.join(Settings::SOURCE_DIR, d), Settings::ASSETS_DIR) if File.exists? d
+					FileUtils.cp_r(File.join(Settings::SOURCE_DIR, d), Settings::ASSETS_DIR)
 				end
 				FileUtils.cp_r(File.join(Settings::SOURCE_DIR, "css"), File.join(Settings::ASSETS_DIR))
 				Dir.glob(Settings::MEDIA_DIR + "/*").each do |d|
@@ -53,7 +55,12 @@ module Striker
 				Archive.process(@@meta) if Settings::CONFIG['archive']
 			end
 
-			private_class_method :init_dir, :process_pages, :process_tags, :process_archive
+			# Process info needed for site meta
+			def self.process_for_site
+				Media::Image.gallerize if Settings::CONFIG['gallerize']
+			end
+
+			private_class_method :init_dir, :process_pages, :process_tags, :process_archive, :process_for_site
 
 		end
 	end
