@@ -23,7 +23,7 @@ module Striker
 
 			BASEURL 			 = File.join(CONFIG['basepath'])
 
-			if CONFIG['gallery']
+			if CONFIG['gallerize']
 				GALLERY_DIR  = File.join(SOURCE_DIR, '_gallery')
 			end
 		end
