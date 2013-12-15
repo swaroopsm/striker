@@ -7,7 +7,7 @@ module Striker
 		def initialize(page, meta)
 			@page = page
 			@site_meta = meta
-			@markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true)
+			@markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true, :tables => true)
 		end
 
 		def process
