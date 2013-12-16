@@ -32,7 +32,7 @@ command :page do |c|
 		options.default :no_sound => true, :no_video => true
 
 		options = options.__hash__
-		Striker::Command::Page.process(args, options)
+		Striker::Command::Page.new(args, options, Dir.pwd).process
 	end
 end
 

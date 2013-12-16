@@ -23,7 +23,7 @@ module Striker
 						page_image = File.join(@page.site_defaults.media_dir, "images", @page.base_dir, i)
 						image = {
 							'src' => i,
-							'url' => File.join(@page.site_defaults.config['basepath'], @page.site_defaults.config['assets'], "images/#{@page.name}-#{i}"),
+							'url' => File.join(@page.site_defaults.config['assets'], "images/#{@page.name}-#{i}"),
 							'content_type' => mime_type(i)
 						}
 						if Dir.exists? File.join(@page.site_defaults.assets_dir, 'images')
@@ -53,11 +53,11 @@ module Striker
 			end
 
 			def thumbnailize
-				base_dir = File.join(@page.site_defaults::MEDIA_DIR, 'images', @image_options[:context]['base_dir'])
-				src = @image_options[:context]['thumbnail']['src']
+				base_dir = File.join(@image_options[:site_defaults].media_dir, 'images', @image_options[:page]['base_dir'])
+				src = @image_options[:page]['thumbnail']['src']
 				image = ImageList.new(File.join(base_dir, "thumbnail#{File.extname src}")).first
 				resized_image = self.process_resize(image)
-				resized_image.write File.join(@page.site_defaults.assets_dir, 'images', src)
+				resized_image.write File.join(@image_options[:site_defaults].assets_dir, 'images', src)
 			end
 
 			def process_resize(image)
@@ -70,31 +70,22 @@ module Striker
 			end
 
 			## For gallery
-			def self.gallerize
-				Dir.chdir @page.site_defaults::GALLERY_DIR
-				main_width, main_height = @page.site_defaults.config['gallerize']['main'].split("X")
-				thumb_width, thumb_height = @page.site_defaults.config['gallerize']['thumb'].split("X")
+			def self.gallerize(site_defaults)
+				Dir.chdir site_defaults.gallery_dir
+				main_width, main_height = site_defaults.config['gallerize']['main'].split("X")
+				thumb_width, thumb_height = site_defaults.config['gallerize']['thumb'].split("X")
 				Dir.glob("*").each_with_index do |file, counter|
 					image = Magick::Image.read(file).first
 					thumbnail = image.resize_to_fit thumb_width.to_i, thumb_height.to_i
-					thumbnail.write(File.join(@page.site_defaults.assets_dir, "images", "gallery-#{counter}-thumb-#{file}")) do 
+					thumbnail.write(File.join(site_defaults.assets_dir, "images", "gallery-#{counter}-thumb-#{file}")) do 
 						self.quality = 75
 					end
 					
 					main = image.resize_to_fit main_width.to_i, main_height.to_i
-					main.write(File.join(@page.site_defaults.assets_dir, "images", "gallery-#{counter}-main-#{file}")) do
+					main.write(File.join(site_defaults.assets_dir, "images", "gallery-#{counter}-main-#{file}")) do
 						self.quality = 60
 					end
 				end
-			end
-
-			def self.gallery
-				images = []
-				Dir.chdir File.join(@page.site_defaults.assets_dir, "images")
-				Dir.glob("gallery-*").sort.each_slice(2) do |g|
-					images << { 'thumbnail' => urlize(g[1]), 'main' => urlize(g[0]) }
-				end
-				images
 			end
 
 			def self.urlize(image)

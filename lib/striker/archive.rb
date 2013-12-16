@@ -25,7 +25,7 @@ module Striker
 			pages = []
 			Dir.chdir(@settings.pages_dir)
 			Dir.glob("*[.md|.markdown]").each do |page|
-				p = Page.new(page)
+				p = Page.new(page, { :site_defaults => @settings })
 				# Ignore archive if set in page front matter
 				grouped_pages << p.page_data unless p.meta['ignore_archive']
 			end

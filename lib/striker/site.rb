@@ -59,18 +59,32 @@ module Striker
 			links
 		end
 
+		def gallery
+			Media::Image.gallerize(@site_defaults) if @site_defaults.config['gallerize'] 
+			images = []
+			Dir.chdir File.join(@site_defaults.assets_dir, "images")
+			Dir.glob("gallery-*").sort.each_slice(2) do |g|
+				images << { 'thumbnail' => self.urlize(g[1]), 'main' => self.urlize(g[0]) }
+			end
+			images
+		end
+
+		def urlize(image)
+			File.join(@site_defaults.baseurl, @site_defaults.config['assets'], "images", image)
+		end
+
 		def meta
 			data = self.site_defaults.config
 			data['source'] = self.site_defaults.source
 			data['basepath'] = File.join "/", data['basepath']
 			data['assets'] = File.join "/", @site_defaults.baseurl, @site_defaults.config['assets']
 			data['pages'] = self.pages(true) #Page.list_full
-			data['tags'] = Tag.list_full if @site_defaults.config['tagged']
+			data['tags'] = Tag.list_full(@site_defaults) if @site_defaults.config['tagged']
 			data['archive'] = Archive.new(@site_defaults).list_full if @site_defaults.config['archive']
 			data['logo'] = self.logo
 			data['sidebar'] = self.sidebar
 			data['links'] = self.links
-			# data['gallery'] = Media::Image.gallery
+			data['gallery'] = self.gallery
 			data
 		end
 

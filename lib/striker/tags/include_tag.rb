@@ -8,10 +8,10 @@ module Striker
 			end
 
 			def render(context)
-				Dir.chdir File.join( context.environments[0]['site'].source, "includes" )
+				Dir.chdir File.join( context.environments[0]['site']['source'], "includes" )
 				template = File.read(@file)
 				Liquid::Template.parse(template).render(
-					'site' => context.environments[0]['site'].config,
+					'site' => context.environments[0]['site'],
 					'page' => context.environments[0]['page']
 				)
 			end
