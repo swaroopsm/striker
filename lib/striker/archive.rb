@@ -1,5 +1,5 @@
 module Striker
-	class Archive
+	class Archive 
 
 		def initialize(settings)
 			@settings = settings
@@ -13,9 +13,8 @@ module Striker
 			end
 		end
 
-	 	def process(site_meta)
-			@site_meta = site_meta
-			FileUtils.mkdir_p(File.join(@settings::basepath, @dir))
+	 	def process
+			FileUtils.mkdir_p(File.join(@settings.basepath, @dir))
 			process_archive_dir
 			process_files
 		end

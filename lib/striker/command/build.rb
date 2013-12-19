@@ -18,6 +18,7 @@ module Striker
 
 				@site = Site.new(@settings)
 				@site_defaults = @site.site_defaults
+				@meta = @site.meta
 
 				process_for_site
 
@@ -64,7 +65,7 @@ module Striker
 			def process_pages
 				@site.pages(true).each do |p|
 					page = Striker::Page.new(p, { :site_defaults => @site_defaults })
-					t = Template.new(page, @site_defaults)
+					t = Template.new(page, @meta)
 					t.process
 				end
 			end
@@ -76,7 +77,8 @@ module Striker
 
 			# Process site archive
 			def process_archive
-				Archive.new(@settings).process(@@meta) if @settings::config['archive']
+				p @settings.config
+				Archive.new(@settings).process if @settings.config['archive']
 			end
 
 			# Process info needed for site meta

@@ -24,7 +24,7 @@ module Striker
 			end
 
 			def render(context)
-				site_defaults = context.environments[0]['site']
+				site_defaults = context.environments[0]['site']['_defaults']
 				image = Media::Image.new(nil, image_options = { :width => @width, :height => @height, :scale => @scale, :page => context['page'], :site_defaults => site_defaults })
 				image.thumbnailize
 				url = File.join(site_defaults.config['assets'], 'images', context['page']['thumbnail']['src'])

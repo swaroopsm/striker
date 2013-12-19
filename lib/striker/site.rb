@@ -74,9 +74,11 @@ module Striker
 		end
 
 		def meta
-			data = self.site_defaults.config
+			data = {}
+			data['config'] = self.site_defaults.config
+			data['name'] = self.site_defaults.config['name']
 			data['source'] = self.site_defaults.source
-			data['basepath'] = File.join "/", data['basepath']
+			data['config']['basepath'] = File.join "/", data['config']['basepath']
 			data['assets'] = File.join "/", @site_defaults.baseurl, @site_defaults.config['assets']
 			data['pages'] = self.pages(true) #Page.list_full
 			data['tags'] = Tag.list_full(@site_defaults) if @site_defaults.config['tagged']
@@ -85,6 +87,7 @@ module Striker
 			data['sidebar'] = self.sidebar
 			data['links'] = self.links
 			data['gallery'] = self.gallery
+			data['_defaults'] = @site_defaults
 			data
 		end
 
