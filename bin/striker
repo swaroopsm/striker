@@ -13,7 +13,7 @@ command :new do |c|
   c.description = 'Generates a new static site with a specified directory structure'
 
   c.action do |args, options|
-		Striker::Command::New.process(args, options)
+		Striker::Command::New.new(args, options, Dir.pwd).process
   end
 end
 
