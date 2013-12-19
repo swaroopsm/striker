@@ -26,7 +26,7 @@ module Striker
 
 				process_tags
 
-				# process_archive
+				process_archive
 
 			end
 
@@ -77,8 +77,7 @@ module Striker
 
 			# Process site archive
 			def process_archive
-				p @settings.config
-				Archive.new(@settings).process if @settings.config['archive']
+				Archive.new(@site_defaults).process if @settings.config['archive']
 			end
 
 			# Process info needed for site meta

@@ -1,8 +1,10 @@
 module Striker
-	class Archive 
+	class Archive < Site
 
 		def initialize(settings)
-			@settings = settings
+			super(settings)
+			@settings = self.site_defaults
+			# @site_meta = self.meta
 		
 			if File.exists? File.join(@settings.source, "config.yml")
 				if @settings.config['archive']
@@ -15,6 +17,7 @@ module Striker
 
 	 	def process
 			FileUtils.mkdir_p(File.join(@settings.basepath, @dir))
+			@site_meta = self.meta
 			process_archive_dir
 			process_files
 		end
@@ -60,22 +63,21 @@ module Striker
 		def process_files
 
 			# Process monthly archive
-			@site_meta['archive'].each do |archive|
+			self.list_full.each do |archive|
 				process_main_template(archive)
 			end
 
 			# Process yearly archive
-			Dir.chdir @settings.templates_dir
+			Dir.chdir File.join(@settings.templates_dir, "archive")
 			@yearly_pages.each do |page|
 
 				template = File.read("yearly.html")
 				months = page[1].group_by{ |pp| pp['date'].strftime("%m") }.keys.uniq
 				parsed_data = Liquid::Template.parse(template).render('site' => @site_meta, 'pages' => page[1], 'year' => page[0], 'months' => months)
 
-				p File.join(@full_path, page[0])
-				# File.open(File.join(@settings::basepath, @settings::CONFIG['archive'], page[0], "index.html"), "w") do |file|
-				# 	file.write(parsed_data)
-				# end
+				File.open(File.join(@settings.basepath, @settings.config['archive'], page[0], "index.html"), "w") do |file|
+					file.write(parsed_data)
+				end
 			end
 		end
 
