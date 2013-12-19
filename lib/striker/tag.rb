@@ -25,7 +25,7 @@ module Striker
 				page = Page.new(file, { :site_defaults => @@site_defaults })
 				tags << page.meta['tags'] if page.meta['tags']
 			end
-			tags.flatten.uniq!
+			tags.size > 0 ? tags.flatten.uniq! : tags
 		end
 
 		def self.list_full(site_defaults)
