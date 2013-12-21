@@ -83,7 +83,7 @@ module Striker
 			# Process info needed for site meta
 			def process_for_site
 				@site_meta = @site.meta
-				# Media::Image.gallerize if @settings.config['gallerize']
+				Media::Image.gallerize(@settings) if @settings.config['gallerize']
 			end
 
 			# private_class_method :init_dir, :process_pages, :process_tags, :process_archive, :process_for_site

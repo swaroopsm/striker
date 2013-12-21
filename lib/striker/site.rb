@@ -60,7 +60,6 @@ module Striker
 		end
 
 		def gallery
-			Media::Image.gallerize(@site_defaults) if @site_defaults.config['gallerize'] 
 			images = []
 			Dir.chdir File.join(@site_defaults.assets_dir, "images")
 			Dir.glob("gallery-*").sort.each_slice(2) do |g|
