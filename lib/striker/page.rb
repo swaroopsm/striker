@@ -53,15 +53,6 @@ module Striker
 			@thumb
 		end
 
-		def self.list_full
-			# pages = []
-			# Dir.chdir(Settings::PAGES_DIR)
-			# Dir.glob("*[.md|markdown]").each do |page|
-			# 	pages << Page.new(page).page_data
-			# end
-			# pages
-		end
-
 		def sections
 			process_sections
 		end
