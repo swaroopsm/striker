@@ -1,6 +1,8 @@
 module Striker
 	class Site
 
+		include Media::Commons
+
 		def settings
 			Striker.settings
 		end
@@ -18,21 +20,22 @@ module Striker
 			pages
 		end
 
+		def process_logo
+			Dir.chdir(File.join(self.settings.media_dir, "images"))
+			find("logo", Media::Image::FORMATS) do |f|
+				image = Media::Image.new(f)
+				image.move
+			end
+		end
+
 		def logo
-			logo = nil
-			FileUtils.chdir File.join(self.settings.media_dir, "images")
-			Dir.glob("*.{jpg,jpeg,bmp,gif,png,svg}").each do |i|
-				if i.match(/^logo.(jpg|jpeg|bmp|gif|png|svg)/)
-					logo = "logo." + $1
-					break
-				end
+			Dir.chdir self.settings.public_dir
+			find("logo", Media::Image::FORMATS) do |f|
+				logo = Media::Base.new(f)
+				logo.referrer = "images"
+				@logo = logo.result
 			end
-			if logo
-				FileUtils.cp(logo, File.join(self.settings.assets_dir, "images"))
-				File.join self.settings.baseurl, self.settings.config['assets'], "images", logo
-			else
-				logo
-			end
+			@logo
 		end
 
 		def sidebar

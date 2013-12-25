@@ -90,6 +90,7 @@ module Striker
 			# Process info needed for site meta
 			def process_for_site
 				@site.gallerize if @settings.config['gallerize']# and not @site.gallerized?
+				@site.process_logo
 				@site_meta = @site.meta
 			end
 
