@@ -35,6 +35,14 @@ module Striker
 				}.size > 0
 			end
 
+			def find(file, formats, options={})
+				Dir.chdir(options[:path]) if options[:path]
+				Dir.glob("*{#{formats.join(',')}}").each do |f|
+					@file = f if f.match /^#{file}(#{formats.join("|")})/
+				end
+				@file ? yield(@file) : return
+			end
+
 		end
 	end
 end
