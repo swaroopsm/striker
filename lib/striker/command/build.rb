@@ -14,19 +14,26 @@ module Striker
 			
 			def process
 
-				init_dir
+				# begin
+					init_dir
 
-				@site = Site.new(@settings)
-				@site_defaults = @site.site_defaults
-				@meta = @site.meta
+					@site = Site.new
 
-				process_for_site
+					process_for_site
 
-				process_pages
+					@meta = @site.meta
 
-				process_tags
 
-				process_archive
+					process_pages
+
+					# process_tags
+ 
+					# process_archive
+
+					true
+				# rescue Exception => e
+				# 	p e
+				# end
 
 			end
 
@@ -64,7 +71,7 @@ module Striker
 			# Process and convert pages to html
 			def process_pages
 				@site.pages(true).each do |p|
-					page = Striker::Page.new(p, { :site_defaults => @site_defaults })
+					page = Striker::Page.new(p)
 					t = Template.new(page, @meta)
 					t.process
 				end
@@ -72,18 +79,18 @@ module Striker
 
 			# Process page tags
 			def process_tags
-				Tag.process(@site_defaults) if @settings.config['tagged']
+				# Tag.new.process if @settings.config['tagged']
 			end
 
 			# Process site archive
 			def process_archive
-				Archive.new(@site_defaults).process if @settings.config['archive']
+				# Archive.new.process if @settings.config['archive']
 			end
 
 			# Process info needed for site meta
 			def process_for_site
+				@site.gallerize if @settings.config['gallerize']# and not @site.gallerized?
 				@site_meta = @site.meta
-				Media::Image.gallerize(@settings) if @settings.config['gallerize']
 			end
 
 			# private_class_method :init_dir, :process_pages, :process_tags, :process_archive, :process_for_site

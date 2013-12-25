@@ -1,38 +1,37 @@
 module Striker
-	class Tag
+	class Tag < Site
 		
 		attr_reader :tag
 
-		def initialize(tag, options={})
+		def initialize(tag=nil)
 			@tag = tag
-			@site_defaults = options[:site_defaults]
+			@settings = self.settings
 		end 
 
 		def pages
 			pages = []
-			Dir.chdir(@site_defaults.pages_dir)
+			Dir.chdir(@settings.pages_dir)
 			Dir.glob("*[.md|.markdown]").each do |page|
-				page = Page.new(page, { :site_defaults => @site_defaults })
+				page = Page.new(page, { :site_defaults => @settings })
 				pages << page.page_data if page.meta['tags'] and page.meta['tags'].include? tag
 			end
 			pages
 		end
 
-		def self.list
+		def list
 			tags = []
-			Dir.chdir(@@site_defaults.pages_dir)
+			Dir.chdir(@settings.pages_dir)
 			Dir.glob("*[.md|.markdown]").each do |file|
-				page = Page.new(file, { :site_defaults => @@site_defaults })
+				page = Page.new(file, { :site_defaults => @settings })
 				tags << page.meta['tags'] if page.meta['tags']
 			end
 			tags.size > 0 ? tags.flatten.uniq! : tags
 		end
 
-		def self.list_full(site_defaults)
-			@@site_defaults = site_defaults
+		def list_full
 			tags = []
-			Dir.chdir(site_defaults.pages_dir)
-			pages = Dir.glob("*[.md|.markdown]").map{ |page| Page.new(page, { :site_defaults => @@site_defaults }) }
+			Dir.chdir(self.settings.pages_dir)
+			pages = Dir.glob("*[.md|.markdown]").map{ |page| Page.new(page) }
 			if self.list
 				self.list.each do |tag|
 					tagged = []
@@ -45,37 +44,35 @@ module Striker
 			tags
 		end
 
-		def self.process(site_defaults)
-			@@site_defaults = site_defaults
+		def process
 			self.list.each do |tag|
-				FileUtils.mkdir_p(File.join(@@site_defaults.basepath, @@site_defaults.config['tagged'], tag))
+				FileUtils.mkdir_p(File.join(@settings.basepath, @settings.config['tagged'], tag))
 			end
 			process_tags
 		end
 
-		def self.process_tags
+		private
+		def process_tags
 			
 			# Tag index template for tags
-			index_template = File.open(File.join(@@site_defaults.templates_dir, "tags/index.html"), "r").read
-			File.open(File.join(@@site_defaults.basepath, @@site_defaults.config['tagged'], "index.html"), "w") do |f|
+			index_template = File.open(File.join(@settings.templates_dir, "tags/index.html"), "r").read
+			File.open(File.join(@settings.basepath, @settings.config['tagged'], "index.html"), "w") do |f|
 				f.write Liquid::Template.parse(index_template).render(
-					'site' => @@site_defaults
+					'site' => @settings
 				)
 			end
 
 			# Process each tag
-			template = File.open(File.join(@@site_defaults.templates_dir, "tags/tag.html"), "r").read
-			Tag.list.each do |tag|
-				File.open(File.join(@@site_defaults.basepath, @@site_defaults.config['tagged'], tag, "index.html"), "w") do |f|
+			template = File.open(File.join(@settings.templates_dir, "tags/tag.html"), "r").read
+			self.list.each do |tag|
+				File.open(File.join(@settings.basepath, @settings.config['tagged'], tag, "index.html"), "w") do |f|
 					f.write Liquid::Template.parse(template).render(
-						'site' => @@site_defaults,
-						'pages' => Tag.new(tag, { :site_defaults => @@site_defaults }).pages
+						'site' => @settings,
+						'pages' => Tag.new(tag).pages
 					)
 				end
 			end
 		end
-
-		private_class_method :process_tags
 
 	end
 end

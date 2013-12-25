@@ -6,14 +6,14 @@ SafeYAML::OPTIONS[:default_mode] = :safe
 module Striker
 	class Page < Site
 
+		include Media::Commons
 
-		attr_reader :meta, :content, :title, :name, :template, :base_dir, :permalink, :filename, :url
+		attr_reader :meta, :content, :title, :name, :template, :base_dir, :permalink, :filename, :url, :images
 
 		def initialize(page, options={})
-			super(options[:site_defaults])
 			@filename = page
 			@base_dir = File.basename page, File.extname(page)
-			@page = File.join self.site_defaults.pages_dir, page
+			@page = File.join self.settings.pages_dir, page
 			@meta = YAML.load_file(@page)
 			@title = @meta['title']
 			@content = extract_content.post_match
@@ -22,22 +22,35 @@ module Striker
 			@permalink = permalink_page
 			@template = @meta['template']
 			@url = page_url
+			move_media("images") if self.images.size < 1 and has_media?("images")
 		end
 		
 		def page_data
 			data = self.meta
 			data['url'] = self.url
-			data['thumbnail'] = self.image.thumbnail
+			data['thumbnail'] = self.thumbnail
 			data['name'] = self.name
 			data['filename'] = self.filename
 			data['base_dir'] = self.base_dir
-			data['images'] = self.image.all
+			data['images'] = self.images
 
 			data
 		end
 
-		def image
-			Media::Image.new(self)
+		def images
+			media_type("images")
+		end
+
+		def thumbnail
+			Dir.chdir(File.join(self.settings.media_dir, "images", self.base_dir))
+			Dir.glob("*").each do |i|
+				image = Media::Image.new(i, { :sleep => true })
+				if image.thumbnail?
+					image.label = image.labelize({ :rename => self.base_dir })
+					@thumb = image.result
+				end
+			end
+			@thumb
 		end
 
 		def self.list_full
@@ -59,16 +72,16 @@ module Striker
 		end
 
 		def permalink_page
-			unless self.site_defaults.config['homepage'] == @base_dir
-				permalink_style = self.meta['permalink'] ? self.meta['permalink']['style'] : self.site_defaults.config['permalink']['style']
-				pretty_url = self.meta['permalink'] ? self.meta['permalink']['pretty'] : self.site_defaults.config['permalink']['pretty']
+			unless self.settings.config['homepage'] == @base_dir
+				permalink_style = self.meta['permalink'] ? self.meta['permalink']['style'] : self.settings.config['permalink']['style']
+				pretty_url = self.meta['permalink'] ? self.meta['permalink']['pretty'] : self.settings.config['permalink']['pretty']
 				filename = permalink_style.split("/").map{ |p| process_permalink(p) }.join("/") unless permalink_style.is_a? Symbol
 				if pretty_url
-					FileUtils.mkdir_p(File.join(self.site_defaults.basepath, filename))
+					FileUtils.mkdir_p(File.join(self.settings.basepath, filename))
 					filename + "/index.html"
 				else
 					unpretty_filename = filename.split("/")[0...-1]
-					FileUtils.mkdir_p(File.join(self.site_defaults.basepath, unpretty_filename))
+					FileUtils.mkdir_p(File.join(self.settings.basepath, unpretty_filename))
 					filename + ".html"
 				end
 			else
@@ -78,11 +91,11 @@ module Striker
 
 		def page_url
 			if @permalink.match(/^index.html/)
-				File.join "/", self.site_defaults.config['basepath']
+				File.join "/", self.settings.config['basepath']
 			elsif @permalink.match(/^([\w\-\/]+)index.html$/)
-				File.join("/", self.site_defaults.config['basepath'], $1)
+				File.join("/", self.settings.config['basepath'], $1)
 			else
-				File.join("/", self.site_defaults.config['basepath'], @permalink)
+				File.join("/", self.settings.config['basepath'], @permalink)
 			end
 		end
 

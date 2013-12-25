@@ -12,6 +12,8 @@ require_relative 'striker/command/build'
 require_relative 'striker/command/strike'
 require_relative 'striker/settings'
 require_relative 'striker/site'
+require_relative 'striker/media/base'
+require_relative 'striker/media/commons'
 require_relative 'striker/page'
 require_relative 'striker/template'
 require_relative 'striker/tag'
@@ -28,8 +30,10 @@ require_relative 'striker/blocks/section'
 
 module Striker
 
-# Initial Setup
+	# Initial Setup
 	def self.configure(settings)
+
+		@@settings = settings
 
 		plugins_dir = settings.plugins_dir
 
@@ -41,6 +45,10 @@ module Striker
 			end
 		end
 
+	end
+
+	def self.settings
+		@@settings
 	end
 
 end

@@ -1,9 +1,8 @@
 module Striker
 	class Archive < Site
 
-		def initialize(settings)
-			super(settings)
-			@settings = self.site_defaults
+		def initialize
+			@settings = self.settings
 			# @site_meta = self.meta
 		
 			if File.exists? File.join(@settings.source, "config.yml")
