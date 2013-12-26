@@ -23,13 +23,13 @@ module Striker
 		def process_logo
 			Dir.chdir(File.join(self.settings.media_dir, "images"))
 			find("logo", Media::Image::FORMATS) do |f|
-				image = Media::Image.new(f)
+				image = Media::Image.new(f, { :sleep => true })
 				image.move
 			end
 		end
 
 		def logo
-			Dir.chdir self.settings.public_dir
+			Dir.chdir File.join(self.settings.assets_dir, "images")
 			find("logo", Media::Image::FORMATS) do |f|
 				logo = Media::Base.new(f)
 				logo.referrer = "images"
@@ -60,21 +60,10 @@ module Striker
 		end
 
 		def gallerize
-			options = self.settings.config["gallerize"]
-			thumbnail_size = options["thumbnail"]["size"].split("X")
-			main_size = options["main"]["size"].split("X")
 			images = Dir.glob(File.join(self.settings.gallery_dir, "*")).sort_by{ |g| File.mtime(g) }.reverse
 			images.each do |g|
-				thumbnail = Media::Image.new(g)
-				main = Media::Image.new(g)
-
-				thumbnail.resize(thumbnail_size[0], thumbnail_size[1])
-				thumbnail.quality = options["thumbnail"]["quality"] if options["thumbnail"]["quality"]
-				thumbnail.move({ :prefix => "gal-1619", :postfix => "thumb" })
-
-				main.resize(main_size[0], main_size[1])
-				main.quality = options["main"]["quality"] if options["main"]["quality"]
-				main.move({ :prefix => "gal-1619", :postfix => "main" })
+				image = Media::Image.new(g)
+				image.gallerize
 			end
 		end
 
