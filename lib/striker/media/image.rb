@@ -69,7 +69,7 @@ module Striker
 			def refactor(options={})
 				@resized_image = options[:factor] ? 
 												 @image.resize(options[:factor]) :
-												 @image.resize(options[:width], options[:height])
+												 @image.resize_to_fit(options[:width], options[:height])
 			end
 
 			def make_move
