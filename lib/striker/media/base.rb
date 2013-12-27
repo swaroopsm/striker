@@ -18,7 +18,7 @@ module Striker
 			end
 
 			def extname
-				File.extname(@resource)
+				File.extname(@resource).downcase
 			end
 
 			def urlize
