@@ -73,3 +73,4 @@ command :sync do |c|
 end
 
 alias_command :serve, :strike
+alias_command :upload, :sync
