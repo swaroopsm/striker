@@ -68,11 +68,13 @@ module Striker
 				pretty_url = self.meta['permalink'] ? self.meta['permalink']['pretty'] : self.settings.config['permalink']['pretty']
 				filename = permalink_style.split("/").map{ |p| process_permalink(p) }.join("/") unless permalink_style.is_a? Symbol
 				if pretty_url
-					FileUtils.mkdir_p(File.join(self.settings.basepath, filename))
+					page = File.join(self.settings.basepath, filename, "index.html")
+					FileUtils.mkdir_p(File.join(self.settings.basepath, filename)) unless permalinked?(page)
 					filename + "/index.html"
 				else
 					unpretty_filename = filename.split("/")[0...-1]
-					FileUtils.mkdir_p(File.join(self.settings.basepath, unpretty_filename))
+					page = File.join(self.settings.basepath, filename + ".html")
+					FileUtils.mkdir_p(File.join(self.settings.basepath, unpretty_filename)) unless pemalinked?(page)
 					filename + ".html"
 				end
 			else
@@ -93,6 +95,11 @@ module Striker
 		def process_permalink(p)
 			p.match(/^:([\w\-]+)/) ? self.meta[$1].to_s.to_url : p
 		end
+
+		def permalinked?(page)
+			File.exists? File.join(self.settings.public_dir, page)
+		end
+
 
 		def extract_sections
 			sections = @content.scan /\{\% section(.*) \%\}/
