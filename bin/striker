@@ -50,12 +50,16 @@ command :strike do |c|
 	c.syntax = 'striker serve'
 	c.description = 'Build & Preview website in the browser'
 
+	c.option '--no-build', String, 'Start site without building'
+
 	c.action do |args, options|
+		options.default :build => true
+
+		options = options.__hash__
+		@server = Striker::Command::Server.new(Dir.pwd, options)
 		
-		@striker = Striker::Command::Build.new(Dir.pwd)
-
-		@striker.process
-
-		@striker.serve
+		@server.start
 	end
 end
+
+alias_command :serve, :strike

@@ -14,7 +14,7 @@ module Striker
 			
 			def process
 
-				# begin
+				begin
 					init_dir
 
 					@site = Site.new
@@ -31,21 +31,10 @@ module Striker
 					# process_archive
 
 					true
-				# rescue Exception => e
-				# 	p e
-				# end
+				rescue Exception => e
+					p e
+				end
 
-			end
-
-			def serve
-				port = @settings.config['port']
-				root = @settings.public_dir
-				server = WEBrick::HTTPServer.new(:Port => port, :DocumentRoot => root)
-
-				trap 'INT' do server.shutdown end
-				p "Site running at: #{File.join("http://localhost:#{port}", @settings.config['basepath'])}"
-				server.start
-				
 			end
 
 			private
