@@ -74,7 +74,7 @@ module Striker
 				else
 					unpretty_filename = filename.split("/")[0...-1]
 					page = File.join(self.settings.basepath, filename + ".html")
-					FileUtils.mkdir_p(File.join(self.settings.basepath, unpretty_filename)) unless pemalinked?(page)
+					FileUtils.mkdir_p(File.join(self.settings.basepath, unpretty_filename)) unless permalinked?(page)
 					filename + ".html"
 				end
 			else
