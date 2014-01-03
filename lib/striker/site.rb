@@ -7,7 +7,7 @@ module Striker
 			Striker.settings
 		end
 
-		def pages(ext=false)
+		def page_files(ext=false)
 			Dir.chdir(File.join(self.settings.pages_dir))
 			pages = []
 			Dir.glob("*").each do |page|
@@ -16,6 +16,15 @@ module Striker
 				else
 					pages << File.basename(page, File.extname(page))
 				end
+			end
+			pages
+		end
+
+		def pages
+			pages = []
+			self.page_files(true).each do |p|
+				page = Page.new(p)
+				pages << page.page_data
 			end
 			pages
 		end
@@ -40,7 +49,7 @@ module Striker
 
 		def sidebar
 			sidebar_pages = []
-			self.pages(true).each do |p|
+			self.page_files(true).each do |p|
 				page = Page.new(p)
 				if page.meta['sidebar']
 					sidebar_pages << { 'title' => page.title, 'url' => page.url, 'base_dir' => page.base_dir, 'position' => page.meta['sidebar']['position'] }
@@ -52,7 +61,7 @@ module Striker
 		# Returns all page links for the site
 		def links
 			links = {}
-			self.pages(true).each do |p|
+			self.page_files(true).each do |p|
 				page = Page.new(p)
 				links[page.base_dir] = page.url
 			end
@@ -96,7 +105,7 @@ module Striker
 			data['source'] = self.settings.source
 			data['baseurl'] = File.join "/", data['config']['basepath']
 			data['assets'] = File.join "/", self.settings.baseurl, self.settings.config['assets']
-			data['pages'] = self.pages(true) #Page.list_full
+			data['pages'] = self.pages #Page.list_full
 			data['tags'] = Tag.new.list_full if self.settings.config['tagged']
 			data['archive'] = Archive.new.list_full if self.settings.config['archive']
 			data['logo'] = self.logo

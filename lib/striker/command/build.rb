@@ -70,7 +70,7 @@ module Striker
 
 			# Process and convert pages to html
 			def process_pages
-				@site.pages(true).each do |p|
+				@site.page_files(true).each do |p|
 					page = Striker::Page.new(p)
 					t = Template.new(page, @meta)
 					t.process
