@@ -62,4 +62,14 @@ command :strike do |c|
 	end
 end
 
+command :sync do |c|
+	c.syntax = 'striker sync'
+	c.description = 'Sync/Upload to the remote server'
+
+	c.action do |args, options|
+		@remote = Striker::Command::Sync.new(Dir.pwd, options.__hash__)
+		@remote.process
+	end
+end
+
 alias_command :serve, :strike
