@@ -69,6 +69,8 @@ module Striker
 		end
 
 		def gallerize
+			Dir.chdir File.join(self.settings.assets_dir, "images")
+			FileUtils.mkdir_p("_gallery")
 			images = Dir.glob(File.join(self.settings.gallery_dir, "*")).sort_by{ |g| File.mtime(g) }.reverse
 			images.each do |g|
 				image = Media::Image.new(g)
@@ -82,13 +84,13 @@ module Striker
 
 		def gallery
 			images = []
-			Dir.chdir File.join(self.settings.assets_dir, "images")
-			Dir.glob("gal-1619-*").sort.each_slice(2) do |g|
+			Dir.chdir File.join(self.settings.assets_dir, "images", "_gallery")
+			Dir.glob("*").sort.each_slice(2) do |g|
 				thumb = Media::Base.new(g[1])
-				thumb.referrer = "images"
+				thumb.referrer = "images/_gallery"
 
 				main = Media::Base.new(g[0])
-				main.referrer = "images"
+				main.referrer = "images/_gallery"
 				images << { 'thumbnail' => thumb.result, 'main' => main.result }
 			end
 			images
