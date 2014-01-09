@@ -2,6 +2,8 @@ module Striker
 	module Media
 		class Base < Site
 
+			include Media::Commons
+
 			attr_reader :resource
 			attr_writer :referrer
 
@@ -60,6 +62,15 @@ module Striker
 					"src" => ( self.respond_to? :label ) ? self.label : self.labelize,
 					"content_type" => self.content_type
 				}
+			end
+
+			def self.count(dir, options={})
+				Dir.chdir(dir)
+				if(options[:extension])
+					return Dir.glob("*{#{options[:extension].join(",")}}", File::FNM_CASEFOLD).size
+				else
+					return Dir.glob("*").size
+				end
 			end
 
 		end
