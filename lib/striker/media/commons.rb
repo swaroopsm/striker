@@ -40,7 +40,16 @@ module Striker
 				Dir.glob("*{#{formats.join(',')}}").each do |f|
 					@file = f if f.match /^#{file}(#{formats.join("|")})/
 				end
-				@file ? yield(@file) : return
+				return yield(@file) if @file && block_given?
+				@file ? @file : return
+			end
+
+			class ::String
+
+				def basename
+					File.basename(self, File.extname(self))
+				end
+
 			end
 
 		end
