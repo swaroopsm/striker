@@ -9,6 +9,7 @@ module Striker
 
 			FORMATS = %w[.jpg .jpeg .bmp .gif .png .svg]
 			THUMBNAIL_REGEX = /^thumbnail(#{FORMATS.join('|')})/
+			GALLERY_PREFIX = "gal-1619"
 
 			def initialize(resource, options={})
 				super(resource)
@@ -41,7 +42,7 @@ module Striker
 			end
 
 			def move(options={})
-				@label = self.labelize(options)
+				@label = self.labelize(options) unless @label
 				make_move
 			end
 
@@ -65,6 +66,15 @@ module Striker
 
 			end
 
+			def gallerized?
+				Dir.chdir(File.join(self.settings.assets_dir, "images"))
+				if find(@label.basename, Media::Image::FORMATS)
+					true
+				else
+					false
+				end
+			end
+
 			private
 			def refactor(options={})
 				@resized_image = options[:factor] ? 
@@ -86,10 +96,14 @@ module Striker
 			end
 
 			def process_gallery(options, postfix)
-				size = options["size"].split("X")
-				resize(size[0], size[1])
-				self.quality = options["quality"] if options["quality"]
-				move({ :prefix => "gal-1619", :postfix => postfix })
+				@label = self.labelize({ :postfix => postfix })
+				unless gallerized?
+					@options[:gallery] = true
+					size = options["size"].split("X")
+					resize(size[0], size[1])
+					self.quality = options["quality"] if options["quality"]
+					move
+				end
 			end
 
 		end
