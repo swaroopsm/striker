@@ -83,12 +83,13 @@ module Striker
 			end
 
 			def make_move
+				path = @options[:gallery] ? "_gallery" : ""
 				if @options[:sleep]
-					FileUtils.cp_r(@image, File.join(self.settings.assets_dir, "images", @label))
+					FileUtils.cp_r(@image, File.join(self.settings.assets_dir, "images", path, @label))
 				else
 					if @resized_image
 						quality = self.quality.to_i
-						@resized_image.write(File.join(self.settings.assets_dir, "images", @label)) do
+						@resized_image.write(File.join(self.settings.assets_dir, "images", path, @label)) do
 							self.quality = quality
 						end
 					end
