@@ -67,7 +67,7 @@ module Striker
 			end
 
 			def gallerized?
-				Dir.chdir(File.join(self.settings.assets_dir, "images"))
+				Dir.chdir(File.join("/", "tmp", "_gallery"))
 				if find(@label.basename, Media::Image::FORMATS)
 					true
 				else
@@ -98,7 +98,11 @@ module Striker
 
 			def process_gallery(options, postfix)
 				@label = self.labelize({ :postfix => postfix })
-				unless gallerized?
+				if gallerized?
+					find(@label.basename, Media::Image::FORMATS) do |f|
+						FileUtils.cp_r(f, File.join(self.settings.assets_dir, "images", "_gallery"))
+					end
+				else
 					@options[:gallery] = true
 					size = options["size"].split("X")
 					resize(size[0], size[1])

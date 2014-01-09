@@ -15,6 +15,9 @@ module Striker
 			def process
 
 				begin
+
+					site_pre_process
+
 					init_dir
 
 					@site = Site.new
@@ -51,7 +54,7 @@ module Striker
 					FileUtils.mkdir_p File.join(@settings.assets_dir, d.split("/")[-1]) if File.directory? d
 				end
 				if @settings.config['include']
-					@settings::config['include'].each do |file|
+					@settings.config['include'].each do |file|
 						FileUtils.cp_r(File.join(@settings.source, file), @settings.basepath)
 					end
 				end
@@ -78,12 +81,17 @@ module Striker
 
 			# Process info needed for site meta
 			def process_for_site
-				@site.gallerize if @settings.config['gallerize']# and not @site.gallerized?
+				if @settings.config['gallerize']
+					@site.gallerize
+				end
 				@site.process_logo
 				@site_meta = @site.meta
 			end
 
-			# private_class_method :init_dir, :process_pages, :process_tags, :process_archive, :process_for_site
+			def site_pre_process
+				Dir.chdir(@settings.assets_dir + "/images")
+				FileUtils.cp_r("_gallery", "/tmp") if Dir.exists?("_gallery")
+			end
 
 		end
 	end

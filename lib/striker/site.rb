@@ -93,6 +93,7 @@ module Striker
 				main.referrer = "images/_gallery"
 				images << { 'thumbnail' => thumb.result, 'main' => main.result }
 			end
+			FileUtils.rm_rf(File.join("/", "tmp", "_gallery"))
 			images
 		end
 
