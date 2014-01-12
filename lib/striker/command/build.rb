@@ -89,8 +89,10 @@ module Striker
 			end
 
 			def site_pre_process
-				Dir.chdir(@settings.assets_dir + "/images")
-				FileUtils.cp_r("_gallery", "/tmp") if Dir.exists?("_gallery")
+				if Dir.exists? @settings.assets_dir + "/images"
+					Dir.chdir(@settings.assets_dir + "/images")
+					FileUtils.cp_r("_gallery", "/tmp") if Dir.exists?("_gallery")
+				end
 			end
 
 		end

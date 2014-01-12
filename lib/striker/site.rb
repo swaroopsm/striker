@@ -83,18 +83,20 @@ module Striker
 		end
 
 		def gallery
-			images = []
-			Dir.chdir File.join(self.settings.assets_dir, "images", "_gallery")
-			Dir.glob("*").sort.each_slice(2) do |g|
-				thumb = Media::Base.new(g[1])
-				thumb.referrer = "images/_gallery"
+			if self.settings.config['gallerize']
+				images = []
+				Dir.chdir File.join(self.settings.assets_dir, "images", "_gallery")
+				Dir.glob("*").sort.each_slice(2) do |g|
+					thumb = Media::Base.new(g[1])
+					thumb.referrer = "images/_gallery"
 
-				main = Media::Base.new(g[0])
-				main.referrer = "images/_gallery"
-				images << { 'thumbnail' => thumb.result, 'main' => main.result }
+					main = Media::Base.new(g[0])
+					main.referrer = "images/_gallery"
+					images << { 'thumbnail' => thumb.result, 'main' => main.result }
+				end
+				FileUtils.rm_rf(File.join("/", "tmp", "_gallery"))
+				images
 			end
-			FileUtils.rm_rf(File.join("/", "tmp", "_gallery"))
-			images
 		end
 
 		def urlize(image)
