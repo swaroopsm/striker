@@ -56,7 +56,7 @@ module Striker
 			end
 
 			def thumbnail?
-				self.resource.match(/^thumbnail#{FORMATS.join("|")}$/)
+				self.resource.match(/^thumbnail(#{FORMATS.join("|")})$/)
 			end
 
 			def gallerize
