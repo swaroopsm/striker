@@ -14,7 +14,7 @@ module Striker
 			
 			def process
 
-				begin
+				# begin
 
 					site_pre_process
 
@@ -34,9 +34,9 @@ module Striker
 					# process_archive
 
 					true
-				rescue Exception => e
-					p e
-				end
+				# rescue Exception => e
+				# 	p e
+				# end
 
 			end
 
@@ -63,9 +63,9 @@ module Striker
 			# Process and convert pages to html
 			def process_pages
 				@site.page_files(true).each do |p|
-					page = Striker::Page.new(p)
-					t = Template.new(page, @meta)
-					t.process
+					page = Striker::Page.new(p, { :site_meta => @meta })
+					# t = Template.new(page)
+					page.process
 				end
 			end
 

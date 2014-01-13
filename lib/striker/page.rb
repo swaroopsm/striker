@@ -8,19 +8,21 @@ module Striker
 
 		include Media::Commons
 
-		attr_reader :meta, :content, :title, :name, :template, :base_dir, :permalink, :filename, :url, :images
+		attr_reader :meta, :content, :title, :name, :template, :base_dir, :permalink, :filename, :url, :images, :matter
 
 		def initialize(page, options={})
 			@filename = page
+			@options = options
 			@base_dir = File.basename page, File.extname(page)
 			@page = File.join self.settings.pages_dir, page
 			@meta = YAML.load_file(@page)
 			@title = @meta['title']
-			@content = extract_content.post_match
+			@matter = extract_content.post_match
 			@name = @meta['title'].to_url
 			@meta['name'] = @base_dir
 			@permalink = permalink_page
-			@template = @meta['template']
+			@template = Template.new(self, @options[:site_meta])
+			@content = @template.liquidize
 			@url = page_url
 			move_media("images") if self.images.size < 1 and has_media?("images")
 		end
@@ -33,6 +35,7 @@ module Striker
 			data['filename'] = self.filename
 			data['base_dir'] = self.base_dir
 			data['images'] = self.images
+			data['content'] = self.content
 
 			data
 		end
@@ -55,6 +58,12 @@ module Striker
 
 		def sections
 			process_sections
+		end
+
+		def process
+			File.open(File.join(self.settings.basepath, "#{self.permalink}"), 'w') do |f|
+				f.write @template.process		
+			end
 		end
 
 		private
@@ -102,14 +111,14 @@ module Striker
 
 
 		def extract_sections
-			sections = @content.scan /\{\% section(.*) \%\}/
+			sections = @matter.scan /\{\% section(.*) \%\}/
 			sections.size > 0 ? sections.flatten!.map!{ |s| s.strip } : []
 		end
 
 		def process_sections
 			sections = []
 			extract_sections.each do |section|
-				match = @content.match /^\{\% section #{section} \%\}(.+)\{\% endsection #{section} \%\}$/m
+				match = @matter.match /^\{\% section #{section} \%\}(.+)\{\% endsection #{section} \%\}$/m
 				if match
 					sections << { 'name' => section, 'content' => $1 }
 				end

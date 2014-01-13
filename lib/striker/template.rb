@@ -2,32 +2,33 @@ module Striker
 
 	class Template
 		
-		attr_reader :page
+		attr_reader :page, :name
 
-		def initialize(page, meta)
+		def initialize(page, site_meta)
 			@page = page
-			@site_meta = meta
+			@site_meta = site_meta
 			@markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true, :tables => true)
+			@file = File.open(File.join(@page.settings.templates_dir, "#{@page.meta['template']}.html"), 'r').read
 		end
 
 		def process
-			template = File.open(File.join(@page.settings.templates_dir, "#{@page.template}.html"), 'r').read
-			File.open(File.join(@page.settings.basepath, "#{@page.permalink}"), 'w') do |f|
-				f.write Liquid::Template.parse(template).render(
-					'content' => parsed_content(@page.content), 
-					'page' => @page.page_data,
-					'site' => @site_meta,
-					'sections' => parse_sections
-				)
-			end
+			Liquid::Template.parse(@file).render(
+				'content' => @page.content, 
+				'page' => @page.page_data,
+				'site' => @site_meta,
+				'sections' => parse_sections
+			)
+		end
+
+		def liquidize
+			Liquid::Template.parse(@markdown.render(@page.matter)).render(
+				'site' => @site_meta,
+				'page' => @page.page_data
+			)
 		end
 
 		private
 		def parsed_content(content)
-			Liquid::Template.parse(@markdown.render(content)).render(
-				'site' => @site_meta,
-				'page' => @page.page_data
-			)
 		end
 
 		def parse_sections

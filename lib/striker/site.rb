@@ -103,10 +103,10 @@ module Striker
 			pages = []
 			self.page_files(true).each do |p|
 				page = Page.new(p)
-				pages << { 'title' => page.title, 'url' => page.url, 'base_dir' => page.base_dir, 'meta' => page.meta } if page.meta["category"]
+				pages << page.page_data  if page.meta["category"]
 			end
 			if pages.size > 0
-				pages.sort_by{ |p| [ p['meta']['date'], p['base_dir'] ] }.group_by{ |p| p['meta']['category'] }
+				pages.sort_by{ |p| [ p['date'], p['base_dir'] ] }.group_by{ |p| p['category'] }
 			else
 				pages
 			end
