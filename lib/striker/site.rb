@@ -99,6 +99,19 @@ module Striker
 			end
 		end
 
+		def categories
+			pages = []
+			self.page_files(true).each do |p|
+				page = Page.new(p)
+				pages << { 'title' => page.title, 'url' => page.url, 'base_dir' => page.base_dir, 'meta' => page.meta } if page.meta["category"]
+			end
+			if pages.size > 0
+				pages.sort_by{ |p| [ p['meta']['date'], p['base_dir'] ] }.group_by{ |p| p['meta']['category'] }
+			else
+				pages
+			end
+		end
+
 		def urlize(image)
 			File.join(self.settings.baseurl, self.settings.config['assets'], "images", image)
 		end
@@ -117,6 +130,7 @@ module Striker
 			data['sidebar'] = self.sidebar
 			data['links'] = self.links
 			data['gallery'] = self.gallery
+			data['categories'] = self.categories
 			data['settings'] = self.settings
 			data
 		end
