@@ -28,6 +28,7 @@ require_relative 'striker/tags/tweet'
 require_relative 'striker/tags/gist'
 require_relative 'striker/tags/include_tag'
 require_relative 'striker/blocks/section'
+require_relative 'striker/blocks/highlight'
 
 module Striker
 
