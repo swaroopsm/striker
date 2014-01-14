@@ -36,6 +36,7 @@ module Striker
 			data['base_dir'] = self.base_dir
 			data['images'] = self.images
 			data['content'] = self.content
+			data['tags'] = self.tags
 
 			data
 		end
@@ -58,6 +59,16 @@ module Striker
 
 		def sections
 			process_sections
+		end
+
+		def tags
+			tags = []
+			if self.meta['tagged']
+				self.meta['tagged'].each do |tag|
+					tags << { 'name' => tag, 'url' => File.join("/", self.settings.baseurl, self.settings.config['tagged'], tag.to_url) }
+				end
+			end
+			tags
 		end
 
 		def process

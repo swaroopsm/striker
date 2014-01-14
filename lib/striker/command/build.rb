@@ -29,7 +29,7 @@ module Striker
 
 					process_pages
 
-					# process_tags
+					process_tags
  
 					# process_archive
 
@@ -71,7 +71,7 @@ module Striker
 
 			# Process page tags
 			def process_tags
-				# Tag.new.process if @settings.config['tagged']
+				Tag.new(nil, {:site_meta => @meta}).process if @settings.config['tagged']
 			end
 
 			# Process site archive

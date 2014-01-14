@@ -3,17 +3,18 @@ module Striker
 		
 		attr_reader :tag
 
-		def initialize(tag=nil)
+		def initialize(tag=nil, options={})
 			@tag = tag
 			@settings = self.settings
+			@options = options
 		end 
 
 		def pages
 			pages = []
 			Dir.chdir(@settings.pages_dir)
 			Dir.glob("*[.md|.markdown]").each do |page|
-				page = Page.new(page, { :site_defaults => @settings })
-				pages << page.page_data if page.meta['tags'] and page.meta['tags'].include? tag
+				page = Page.new(page, { :site_meta => @options[:site_meta] })
+				pages << page.page_data if page.meta['tagged'] and page.meta['tagged'].include? tag
 			end
 			pages
 		end
@@ -22,10 +23,10 @@ module Striker
 			tags = []
 			Dir.chdir(@settings.pages_dir)
 			Dir.glob("*[.md|.markdown]").each do |file|
-				page = Page.new(file, { :site_defaults => @settings })
-				tags << page.meta['tags'] if page.meta['tags']
+				page = Page.new(file, { :site_meta => @options[:site_meta] })
+				tags << page.meta['tagged'] if page.meta['tagged']
 			end
-			tags.size > 0 ? tags.flatten.uniq! : tags
+			tags.size > 0 ? tags.flatten.uniq : tags
 		end
 
 		def list_full
@@ -36,7 +37,7 @@ module Striker
 				self.list.each do |tag|
 					tagged = []
 					pages.each do |page|
-						tagged << page.page_data if page.meta['tags'] and page.meta['tags'].include? tag
+						tagged << page.page_data if page.meta['tagged'] and page.meta['tagged'].include? tag
 					end
 					tags << { 'name' => tag, 'pages' => tagged }
 				end
@@ -58,7 +59,7 @@ module Striker
 			index_template = File.open(File.join(@settings.templates_dir, "tags/index.html"), "r").read
 			File.open(File.join(@settings.basepath, @settings.config['tagged'], "index.html"), "w") do |f|
 				f.write Liquid::Template.parse(index_template).render(
-					'site' => @settings
+					'site' => @options[:site_meta]
 				)
 			end
 
@@ -67,7 +68,7 @@ module Striker
 			self.list.each do |tag|
 				File.open(File.join(@settings.basepath, @settings.config['tagged'], tag, "index.html"), "w") do |f|
 					f.write Liquid::Template.parse(template).render(
-						'site' => @settings,
+						'site' => @options[:site_meta],
 						'pages' => Tag.new(tag).pages
 					)
 				end
