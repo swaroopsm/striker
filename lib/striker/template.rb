@@ -7,7 +7,7 @@ module Striker
 		def initialize(page, site_meta)
 			@page = page
 			@site_meta = site_meta
-			@markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true, :tables => true)
+			@markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true, :tables => true, :underline => true)
 			@file = File.open(File.join(@page.settings.templates_dir, "#{@page.meta['template']}.html"), 'r').read
 		end
 
