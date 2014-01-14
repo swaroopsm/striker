@@ -39,7 +39,7 @@ module Striker
 					pages.each do |page|
 						tagged << page.page_data if page.meta['tagged'] and page.meta['tagged'].include? tag
 					end
-					tags << { 'name' => tag, 'url' => File.join("/", @settings.baseurl, @settings.config['tagged'], tag), 'pages' => tagged }
+					tags << { 'name' => tag, 'url' => File.join("/", @settings.baseurl, @settings.config['tagged']['permalink'], @settings.config['tagged']['name'], tag), 'pages' => tagged }
 				end
 			end
 			tags
@@ -47,26 +47,16 @@ module Striker
 
 		def process
 			self.list.each do |tag|
-				FileUtils.mkdir_p(File.join(@settings.basepath, @settings.config['tagged'], tag))
+				FileUtils.mkdir_p(File.join(@settings.basepath, @settings.config['tagged']['permalink'], @settings.config['tagged']['name'], tag))
 			end
 			process_tags
 		end
 
 		private
 		def process_tags
-			
-			# Tag index template for tags
-			index_template = File.open(File.join(@settings.templates_dir, "tags/index.html"), "r").read
-			File.open(File.join(@settings.basepath, @settings.config['tagged'], "index.html"), "w") do |f|
-				f.write Liquid::Template.parse(index_template).render(
-					'site' => @options[:site_meta]
-				)
-			end
-
-			# Process each tag
 			template = File.open(File.join(@settings.templates_dir, "tags/tag.html"), "r").read
 			self.list.each do |tag|
-				File.open(File.join(@settings.basepath, @settings.config['tagged'], tag, "index.html"), "w") do |f|
+				File.open(File.join(@settings.basepath, @settings.config['tagged']['permalink'], @settings.config['tagged']['name'], tag, "index.html"), "w") do |f|
 					f.write Liquid::Template.parse(template).render(
 						'site' => @options[:site_meta],
 						'pages' => Tag.new(tag).pages

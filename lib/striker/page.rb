@@ -65,7 +65,7 @@ module Striker
 			tags = []
 			if self.meta['tagged']
 				self.meta['tagged'].each do |tag|
-					tags << { 'name' => tag, 'url' => File.join("/", self.settings.baseurl, self.settings.config['tagged'], tag.to_url) }
+					tags << { 'name' => tag, 'url' => File.join("/", self.settings.baseurl, self.settings.config['tagged']['permalink'], self.settings.config['tagged']['name'], tag.to_url) }
 				end
 			end
 			tags
