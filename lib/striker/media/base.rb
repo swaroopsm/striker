@@ -60,7 +60,8 @@ module Striker
 				{
 					"url" => self.urlize,
 					"src" => ( self.respond_to? :label ) ? self.label : self.labelize,
-					"content_type" => self.content_type
+					"content_type" => self.content_type,
+					"original" => ( self.respond_to? :label ) ? nil : ( self.basename )
 				}
 			end
 
