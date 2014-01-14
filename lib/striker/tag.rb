@@ -56,10 +56,11 @@ module Striker
 		def process_tags
 			template = File.open(File.join(@settings.templates_dir, "tags/tag.html"), "r").read
 			self.list.each do |tag|
+				tagged = { 'tag' => tag, 'pages' => Tag.new(tag).pages } 
 				File.open(File.join(@settings.basepath, @settings.config['tagged']['permalink'], @settings.config['tagged']['name'], tag, "index.html"), "w") do |f|
 					f.write Liquid::Template.parse(template).render(
 						'site' => @options[:site_meta],
-						'pages' => Tag.new(tag).pages
+						'tagged' => tagged
 					)
 				end
 			end
