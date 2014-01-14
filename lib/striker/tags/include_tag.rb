@@ -12,7 +12,8 @@ module Striker
 				template = File.read(@file)
 				Liquid::Template.parse(template).render(
 					'site' => context.environments[0]['site'],
-					'page' => context.environments[0]['page']
+					'page' => context.environments[0]['page'],
+					'tagged' => context.environments[0]['tagged']
 				)
 			end
 
