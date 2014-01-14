@@ -68,6 +68,22 @@ module Striker
 			links
 		end
 
+		# Returns all images specific to a site
+		def images
+			images = []
+			Dir.chdir( File.join self.settings.public_dir, "assets/images" )
+			Dir.glob("*{#{Media::Image::FORMATS.join(',')}}").each do |i|
+				if i.match(/^site-1619-(.+)/)
+					name = File.basename($1, File.extname($1))
+					image = Media::Base.new(i)
+					image.referrer = "images"
+					images << { name => image.result }
+				end
+			end
+
+			images
+		end
+
 		def gallerize
 			Dir.chdir File.join(self.settings.assets_dir, "images")
 			FileUtils.mkdir_p("_gallery")
@@ -132,6 +148,7 @@ module Striker
 			data['gallery'] = self.gallery
 			data['categories'] = self.categories
 			data['settings'] = self.settings
+			data['images'] = self.images
 			data
 		end
 
