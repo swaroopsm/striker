@@ -39,7 +39,7 @@ module Striker
 					pages.each do |page|
 						tagged << page.page_data if page.meta['tagged'] and page.meta['tagged'].include? tag
 					end
-					tags << { 'name' => tag, 'pages' => tagged }
+					tags << { 'name' => tag, 'url' => File.join("/", @settings.baseurl, @settings.config['tagged'], tag), 'pages' => tagged }
 				end
 			end
 			tags
