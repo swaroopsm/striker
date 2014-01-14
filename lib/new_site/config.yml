@@ -6,7 +6,9 @@ destination: public
 permalink:
   style: :name
   pretty: true
-tagged: tagged
+tagged: 
+  name: tagged
+  permalink: /
 archive: archive
 homepage: index
 include_assets:
