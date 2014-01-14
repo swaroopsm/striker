@@ -12,30 +12,32 @@ module Striker
 		end
 
 		def process
+			page_data = @page.page_data
+			page_data['sections'] = parse_sections
 			Liquid::Template.parse(@file).render(
 				'content' => @page.content, 
-				'page' => @page.page_data,
-				'site' => @site_meta,
-				'sections' => parse_sections
+				'page' => page_data,
+				'site' => @site_meta
 			)
 		end
 
 		def liquidize
-			Liquid::Template.parse(@markdown.render(@page.matter)).render(
+			parsed_content(@page.matter)
+		end
+
+		private
+		def parsed_content(content)
+			Liquid::Template.parse(@markdown.render(content)).render(
 				'site' => @site_meta,
 				'page' => @page.page_data
 			)
 		end
 
-		private
-		def parsed_content(content)
-		end
-
 		def parse_sections
-			sections = {}
+			sections = []
 			if @page.sections
 				@page.sections.each do |section|
-					sections[section['name']] = parsed_content(section['content'])
+					sections << { 'name' => section['name'], 'content' => parsed_content(section['content']) }
 				end
 			end
 			sections
