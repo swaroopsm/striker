@@ -45,14 +45,22 @@ module Striker
 			# Create initial site directories
 			def init_dir
 				FileUtils.rm_rf(File.join @settings.public_dir, ".")
+
 				FileUtils.mkdir_p [ @settings.basepath, @settings.assets_dir ]
 				@settings.config['include_assets'].each do |d|
 					FileUtils.cp_r(File.join(@settings.source, d), @settings.assets_dir)
 				end
+
 				FileUtils.cp_r(File.join(@settings.source, "css"), File.join(@settings.assets_dir))
-				Dir.glob(@settings::media_dir + "/*").each do |d|
+				Dir.glob(@settings.media_dir + "/*").each do |d|
 					FileUtils.mkdir_p File.join(@settings.assets_dir, d.split("/")[-1]) if File.directory? d
 				end
+
+				Dir.glob(@settings.media_dir + "/images/*" + "{#{Media::Image::FORMATS.join(',')}}").each do |i|
+					image = Media::Image.new(i, { :sleep => true })
+					image.move({ :prefix => "site-1619" })
+				end
+
 				if @settings.config['include']
 					@settings.config['include'].each do |file|
 						FileUtils.cp_r(File.join(@settings.source, file), @settings.basepath)
