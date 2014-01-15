@@ -74,11 +74,11 @@ end
 
 command :sitemap do |c|
 	c.syntax = 'striker sitemap'
-	c.description = 'Generate Sitemap for the current site'
+	c.description = 'Generate sitemap & robots.txt for the current site'
 
 	c.action do |args, options|
 		@sitemap = Striker::Command::Sitemap.new(args, options.__hash__, Dir.pwd)
-		@sitemap.generate
+		@sitemap.process
 	end
 end
 
