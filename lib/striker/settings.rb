@@ -2,7 +2,7 @@ module Striker
 	class Settings
 
 		attr_reader :source, :pages_dir, :templates_dir, :media_dir, :plugins_dir, :pages_template,
-								:config, :public_dir, :basepath, :assets_dir, :baseurl, :gallery_dir
+								:config, :public_dir, :basepath, :assets_dir, :baseurl, :gallery_dir, :server
 
 		def initialize(source)
 			
@@ -28,6 +28,11 @@ module Striker
 				if @config['gallerize']
 					@gallery_dir  = File.join(@source, '_gallery')
 				end
+			end
+
+			# Remote Server configuration
+			if File.exists? File.join(@source, 'server.yml')
+				@server = YAML.load_file(File.join(@source, 'server.yml'))
 			end
 
 		end

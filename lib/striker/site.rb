@@ -135,6 +135,7 @@ module Striker
 		def meta
 			data = {}
 			data['config'] = self.settings.config
+			data['server'] = self.settings.server
 			data['name'] = self.settings.config['name']
 			data['source'] = self.settings.source
 			data['baseurl'] = File.join "/", data['config']['basepath']

@@ -5,7 +5,7 @@ module Striker
 			def initialize(source, options)
 				super(source)
 				@options = options
-				@remote = self.config['remote']
+				@remote = self.server['remote']
 			end
 
 			def process

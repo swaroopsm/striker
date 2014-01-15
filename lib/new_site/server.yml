@@ -1,0 +1,4 @@
+remote:
+ host: example.org
+ username: yourusername
+ path: path/to/public/dir
