@@ -72,5 +72,15 @@ command :sync do |c|
 	end
 end
 
+command :sitemap do |c|
+	c.syntax = 'striker sitemap'
+	c.description = 'Generate Sitemap for the current site'
+
+	c.action do |args, options|
+		@sitemap = Striker::Command::Sitemap.new(args, options.__hash__, Dir.pwd)
+		@sitemap.generate
+	end
+end
+
 alias_command :serve, :strike
 alias_command :upload, :sync
