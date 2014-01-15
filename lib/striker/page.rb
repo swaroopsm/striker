@@ -37,6 +37,7 @@ module Striker
 			data['images'] = self.images
 			data['content'] = self.content
 			data['tags'] = self.tags
+			data['homepage'] = self.homepage?
 
 			data
 		end
@@ -71,6 +72,10 @@ module Striker
 			tags
 		end
 
+		def homepage?
+			self.settings.config['homepage'] == @base_dir
+		end
+
 		def process
 			File.open(File.join(self.settings.basepath, "#{self.permalink}"), 'w') do |f|
 				f.write @template.process		
@@ -83,7 +88,7 @@ module Striker
 		end
 
 		def permalink_page
-			unless self.settings.config['homepage'] == @base_dir
+			unless self.homepage?
 				permalink_style = self.meta['permalink'] ? self.meta['permalink']['style'] : self.settings.config['permalink']['style']
 				pretty_url = self.meta['permalink'] ? self.meta['permalink']['pretty'] : self.settings.config['permalink']['pretty']
 				filename = permalink_style.split("/").map{ |p| process_permalink(p) }.join("/") unless permalink_style.is_a? Symbol
