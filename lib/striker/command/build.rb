@@ -63,6 +63,8 @@ module Striker
 					end
 				end
 
+				FileUtils.cp_r(Dir.glob(File.join(@settings.extras_dir) + "/*"), File.join(@settings.basepath))
+
 				if @settings.config['include']
 					@settings.config['include'].each do |file|
 						FileUtils.cp_r(File.join(@settings.source, file), @settings.basepath)

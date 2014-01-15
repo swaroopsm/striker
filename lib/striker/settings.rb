@@ -2,7 +2,8 @@ module Striker
 	class Settings
 
 		attr_reader :source, :pages_dir, :templates_dir, :media_dir, :plugins_dir, :pages_template,
-								:config, :public_dir, :basepath, :assets_dir, :baseurl, :gallery_dir, :server
+								:config, :public_dir, :basepath, :assets_dir, :baseurl, :gallery_dir, :server,
+								:extras_dir
 
 		def initialize(source)
 			
@@ -12,6 +13,7 @@ module Striker
 			@templates_dir  = File.join(source, "templates")
 			@media_dir      = File.join(source, "media")
 			@plugins_dir		= File.join(source, "plugins")
+			@extras_dir 		= File.join(source, "extras")
 
 			# Default configuration from config.yml
 			if File.exists? File.join @source, 'config.yml'
