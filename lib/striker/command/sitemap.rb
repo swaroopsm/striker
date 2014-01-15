@@ -82,7 +82,8 @@ module Striker
 			def liquidize(template)
 				Liquid::Template.parse(template).render(
 			  	'sitemap' => sitemap_data,
-			  	'robots' => robots_data
+			  	'robots' => robots_data,
+			  	'remote' => @remote
 				)
 			end
 
