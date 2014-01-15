@@ -57,8 +57,10 @@ module Striker
 				end
 
 				Dir.glob(@settings.media_dir + "/images/*" + "{#{Media::Image::FORMATS.join(',')}}").each do |i|
-					image = Media::Image.new(i, { :sleep => true })
-					image.move({ :prefix => "site-1619" })
+					if File.file? i
+						image = Media::Image.new(i, { :sleep => true })
+						image.move({ :prefix => "site-1619" })
+					end
 				end
 
 				if @settings.config['include']
