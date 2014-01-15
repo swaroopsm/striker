@@ -7,7 +7,7 @@ module Striker
 			attr_reader :image
 			attr_accessor :label, :quality
 
-			FORMATS = %w[.jpg .jpeg .bmp .gif .png .svg]
+			FORMATS = %w[.jpg .jpeg .bmp .gif .png .svg, .ico]
 			THUMBNAIL_REGEX = /^thumbnail(#{FORMATS.join('|')})/
 			GALLERY_PREFIX = "gal-1619"
 
