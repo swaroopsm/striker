@@ -65,7 +65,7 @@ module Striker
 			def robots_data
 				{ 
 					'disallow' => File.join(@site.settings.baseurl, @site.settings.config['assets']),
-					'sitemap' => File.join(@site.settings.baseurl, SITEMAP_FILE) 
+					'sitemap' => File.join("#{@remote['protocol']}://#{@remote['host']}", @site.settings.baseurl, SITEMAP_FILE) 
 				}
 			end
 
