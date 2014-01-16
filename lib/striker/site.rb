@@ -132,6 +132,15 @@ module Striker
 			File.join(self.settings.baseurl, self.settings.config['assets'], "images", image)
 		end
 
+		def url
+			if self.settings.server
+				remote = self.settings.server['remote']
+				@site_url = File.join("#{remote['protocol']}://", remote['host'])
+			end
+
+			@site_url
+		end
+
 		def meta
 			data = {}
 			data['config'] = self.settings.config
@@ -150,6 +159,7 @@ module Striker
 			data['categories'] = self.categories
 			data['settings'] = self.settings
 			data['images'] = self.images
+			data['url'] = self.url
 			data
 		end
 
