@@ -1,19 +1,17 @@
 module Striker
 	module Command
-		class Page
+		class Page < Base
 
 			def initialize(args, options, path)
-				@settings = Settings.new(path)
-				@args = args
-				@options = options
+				super(args, options, path)
 			end
 
 			def process
-				if @options[:new]
-					page_name = @options[:new].downcase
-					title = @options[:title]
+				if self.options[:new]
+					page_name = self.options[:new].downcase
+					title = self.options[:title]
 					new_page page_name, title
-					unless @options[:no_media]
+					unless self.options[:no_media]
 						new_media(page_name)
 					end
 				else
@@ -34,7 +32,7 @@ module Striker
 						}
 
 						contents = Liquid::Template.parse(file.read).render front_matter 
-						File.open(File.join(@settings.pages_dir, "#{page}.md"), "w") do |f|
+						File.open(File.join(self.pages_dir, "#{page}.md"), "w") do |f|
 							f.write contents
 						end
 					end
@@ -62,9 +60,9 @@ module Striker
 			end
 
 			def new_media(page)
-				FileUtils.mkdir(File.join(@settings.media_dir, 'images', page)) unless @options[:no_image]
-				FileUtils.mkdir(File.join(@settings.media_dir, 'sounds', page)) unless @options[:no_sound]
-				FileUtils.mkdir(File.join(@settings.media_dir, 'videos', page)) unless @options[:no_video]
+				FileUtils.mkdir(File.join(self.media_dir, 'images', page)) unless self.options[:no_image]
+				FileUtils.mkdir(File.join(self.media_dir, 'sounds', page)) unless self.options[:no_sound]
+				FileUtils.mkdir(File.join(self.media_dir, 'videos', page)) unless self.options[:no_video]
 			end
 
 		end

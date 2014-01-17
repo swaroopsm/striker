@@ -2,15 +2,14 @@ module Striker
 	module Command
 		class Server < Build
 
-			def initialize(source, options)
-				super(source)
-				@options = options
+			def initialize(args, options, path)
+				super(args, options, path)
 			end
 
 			def start
-				if @options[:no_build]
+				if self.options[:no_build]
 
-				elsif @options[:build]
+				elsif self.options[:build]
 					self.process
 				end
 
@@ -19,12 +18,12 @@ module Striker
 
 			private
 			def start_server
-				port = @settings.config['port']
-				root = @settings.public_dir
+				port = self.config['port']
+				root = self.public_dir
 				server = WEBrick::HTTPServer.new(:Port => port, :DocumentRoot => root)
 
 				trap 'INT' do server.shutdown end
-				p "Site running at: #{File.join("http://localhost:#{port}", @settings.config['basepath'])}"
+				p "Site running at: #{File.join("http://localhost:#{port}", self.config['basepath'])}"
 				server.start
 			end
 

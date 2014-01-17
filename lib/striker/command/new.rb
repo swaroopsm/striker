@@ -1,34 +1,37 @@
 module Striker
 	module Command
-		class New
+		class New < Base
 
 			def initialize(args, options, path)
-				@args = args
-				@options = options
-				@settings = Settings.new(path)
+				super(args, options, path)
 			end
 
 			# Generates new site and related directories
 			def process
-				@site_name = @args.join
-				FileUtils.mkdir @site_name
-				FileUtils.cp_r Dir.glob(File.expand_path('../../../new_site', __FILE__) + '/*'), File.join(@settings.source, @site_name)
-				p @site_name
-				FileUtils.mkdir_p File.join(@settings.source, @site_name, "media")
-				FileUtils.mkdir_p File.join(@settings.source, @site_name, "pages")
-				FileUtils.mkdir_p File.join(@settings.source, @site_name, "media/images")
-				FileUtils.mkdir_p File.join(@settings.source, @site_name, "media/videos")
-				FileUtils.mkdir_p File.join(@settings.source, @site_name, "media/sounds")
-				FileUtils.mkdir_p File.join(@settings.source, @site_name, "plugins")
-				FileUtils.mkdir_p File.join(@settings.source, @site_name, "extras")
-				default_page
+				begin
+					@site_name = self.args.join
+					FileUtils.mkdir @site_name
+					FileUtils.cp_r Dir.glob(File.expand_path('../../../new_site', __FILE__) + '/*'), File.join(self.source, @site_name)
+					FileUtils.mkdir_p File.join(self.source, @site_name, "media")
+					FileUtils.mkdir_p File.join(self.source, @site_name, "pages")
+					FileUtils.mkdir_p File.join(self.source, @site_name, "media/images")
+					FileUtils.mkdir_p File.join(self.source, @site_name, "media/videos")
+					FileUtils.mkdir_p File.join(self.source, @site_name, "media/sounds")
+					FileUtils.mkdir_p File.join(self.source, @site_name, "plugins")
+					FileUtils.mkdir_p File.join(self.source, @site_name, "extras")
+					default_page
+
+					p "#{@site_name} created."
+				rescue Exception => e
+					p e
+				end
 			end
 
 			private
 
 			# TODO: Find an efficient way to handle this.
 			def default_page
-				Dir.chdir File.join(@settings.source, @site_name)
+				Dir.chdir File.join(self.source, @site_name)
 				File.open Settings::PAGES_TEMPLATE + '/page.md', 'r' do |file|
 
 					front_matter = {
@@ -43,7 +46,7 @@ module Striker
 						f.write contents
 					end
 				end
-				FileUtils.mkdir_p(File.join(@settings.source, @site_name, "media/images", "index"))
+				FileUtils.mkdir_p(File.join(self.source, @site_name, "media/images", "index"))
 			end
 
 		end

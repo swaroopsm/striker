@@ -2,14 +2,15 @@ require "webrick"
 
 module Striker
 	module Command
-		class Build
+		class Build < Base
 
 			attr_accessor :site_meta
 
-			def initialize(source)
-				@settings = Striker::Settings.new(source)
+			def initialize(args, options, path)
+				super(args, options, path)
+				# self = Striker::Settings.new(source)
 
-				Striker.configure(@settings)
+				# Striker.configure(self)
 			end
 			
 			def process
@@ -44,30 +45,30 @@ module Striker
 
 			# Create initial site directories
 			def init_dir
-				FileUtils.rm_rf(File.join @settings.public_dir, ".")
+				FileUtils.rm_rf(File.join self.public_dir, ".")
 
-				FileUtils.mkdir_p [ @settings.basepath, @settings.assets_dir ]
-				@settings.config['include_assets'].each do |d|
-					FileUtils.cp_r(File.join(@settings.source, d), @settings.assets_dir)
+				FileUtils.mkdir_p [ self.basepath, self.assets_dir ]
+				self.config['include_assets'].each do |d|
+					FileUtils.cp_r(File.join(self.source, d), self.assets_dir)
 				end
 
-				FileUtils.cp_r(File.join(@settings.source, "css"), File.join(@settings.assets_dir))
-				Dir.glob(@settings.media_dir + "/*").each do |d|
-					FileUtils.mkdir_p File.join(@settings.assets_dir, d.split("/")[-1]) if File.directory? d
+				FileUtils.cp_r(File.join(self.source, "css"), File.join(self.assets_dir))
+				Dir.glob(self.media_dir + "/*").each do |d|
+					FileUtils.mkdir_p File.join(self.assets_dir, d.split("/")[-1]) if File.directory? d
 				end
 
-				Dir.glob(@settings.media_dir + "/images/*" + "{#{Media::Image::FORMATS.join(',')}}").each do |i|
+				Dir.glob(self.media_dir + "/images/*" + "{#{Media::Image::FORMATS.join(',')}}").each do |i|
 					if File.file? i
 						image = Media::Image.new(i, { :sleep => true })
 						image.move({ :prefix => "site-1619" })
 					end
 				end
 
-				FileUtils.cp_r(Dir.glob(File.join(@settings.extras_dir) + "/*"), File.join(@settings.basepath))
+				FileUtils.cp_r(Dir.glob(File.join(self.extras_dir) + "/*"), File.join(self.basepath))
 
-				if @settings.config['include']
-					@settings.config['include'].each do |file|
-						FileUtils.cp_r(File.join(@settings.source, file), @settings.basepath)
+				if self.config['include']
+					self.config['include'].each do |file|
+						FileUtils.cp_r(File.join(self.source, file), self.basepath)
 					end
 				end
 			end
@@ -83,17 +84,17 @@ module Striker
 
 			# Process page tags
 			def process_tags
-				Tag.new(nil, {:site_meta => @meta}).process if @settings.config['tagged']
+				Tag.new(nil, {:site_meta => @meta}).process if self.config['tagged']
 			end
 
 			# Process site archive
 			def process_archive
-				# Archive.new.process if @settings.config['archive']
+				# Archive.new.process if self.config['archive']
 			end
 
 			# Process info needed for site meta
 			def process_for_site
-				if @settings.config['gallerize']
+				if self.config['gallerize']
 					@site.gallerize
 				end
 				@site.process_logo
@@ -101,8 +102,8 @@ module Striker
 			end
 
 			def site_pre_process
-				if Dir.exists? @settings.assets_dir + "/images"
-					Dir.chdir(@settings.assets_dir + "/images")
+				if Dir.exists? self.assets_dir + "/images"
+					Dir.chdir(self.assets_dir + "/images")
 					FileUtils.cp_r("_gallery", "/tmp") if Dir.exists?("_gallery")
 				end
 			end
