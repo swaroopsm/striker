@@ -34,10 +34,10 @@ module Striker
 		end
 
 		def parse_sections
-			sections = []
+			sections = {}
 			if @page.sections
 				@page.sections.each do |section|
-					sections << { 'name' => section['name'], 'content' => parsed_content(section['content']) }
+					sections[section['name']] = parsed_content(section['content'])
 				end
 			end
 			sections

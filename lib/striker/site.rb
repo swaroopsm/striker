@@ -122,7 +122,7 @@ module Striker
 				pages << page.page_data  if page.meta["category"]
 			end
 			if pages.size > 0
-				pages.sort_by{ |p| [ p['date'], p['base_dir'] ] }.group_by{ |p| p['category'] }
+				pages.sort_by{ |p| [ p['date'], p['base_dir'] ] }.reverse.group_by{ |p| p['category'] }
 			else
 				pages
 			end
