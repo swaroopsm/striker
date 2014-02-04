@@ -7,8 +7,8 @@ permalink:
   style: :name
   pretty: true
 tagged: 
-  name: tagged
-  permalink: /
+ name: tagged
+ permalink: /
 archive: archive
 homepage: index
 include_assets:
