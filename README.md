@@ -1,6 +1,8 @@
 # Striker
 
+<!--
 [![Code Climate](https://codeclimate.com/github/swaroopsm/striker.png)](https://codeclimate.com/github/swaroopsm/striker)
+-->
 
 A Simple & Fast Static Site Generator. Striker has been released as a pre version as of now, to get reviews and bug reports.
 
@@ -17,42 +19,85 @@ And then execute:
 
 Or install it yourself as:
 -->
+	
+	$ git clone git@github.com:swaroopsm/striker.git
 
-    $ gem install striker --pre
+   <!-- $ gem install striker --pre -->
+   
 
 ## Usage
 
 #### Create New Site
-	$ striker new my-awesome-site
+	$ bin/striker new my-awesome-site
 	$ cd my-awesome-site
 
 ##### This creates the following directory structure:
 	my-awesome-site/
 		css/
+		extras/
+		includes/
 		js/
 		media/
 			images/
 			sounds/
 			videos/
 		pages/
+		plugins/
 		templates/
 		config.yml
+		server.yml
+
+#### Directory Structure
+#
+	css/
+	Contains all stylesheets.
+#
+	extras/
+	Contains any files that you would like to include in your destination. 
+	Eg.: Files like sitemap.xml, robots.txt, .htaccess etc.
+#
+	includes/
+	Contains pages that you would like to include in your templates
+	Eg.: header.html, footer.html, analytics.html etc.
+#
+	js/
+	Contains all javascripts.
+#
+	media/
+	Contains page specific images etc.
+	If you would lke to add an image to a page about-us, then you need to add it in media/images/about-us/image.png
+	If you would like to add an image that is available throughtout the site, like a logo.jpg, you can add it im media/images/logo.png
+#
+	pages/
+	Contains all the pages that are in markdown.
+#
+	plugins/
+	Contains all your custom plugins. These plugins are written in ruby.
+#
+	templates/
+	Contains markup for your pages.
+#
+	config.yml
+	Configuration file for the website, that striker depends on.
+#
+	server.yml
+	Configuration file for uploading your website on to your production server.
 
 
 #### Create New Page
-	$ striker page --new home --title "Home Page" [--no-media | --no-image | --no-sound | --no-video]
+	$ bin/striker page --new about-us --title "About Us" [--no-media | --no-image | --no-sound | --no-video]
 Use the appropriate option if you need images or videos or sound.
 
-This creates a page named `home.md` in `pages/`. The content is written in [markdown](http://daringfireball.net/projects/markdown/).
+This creates a page named `about-us.md` in `pages/`. The content is written in [markdown](http://daringfireball.net/projects/markdown/).
 #####The front matter of this page looks like the following
 		---
-		title: Home Page
+		title: About Us
 		author: Swaroop SM
 		date: 2013-10-19
 		template: page
 		---
 
-		### Home Page
+		### About Us
 
 You can include any front-matter, but `title`, `date` and `template` are mandatory fields
 
@@ -67,9 +112,9 @@ Make sure you have [ImageMagick](http://www.imagemagick.org/script/index.php) in
 
 ##### Add thumbnail to a page.
 If you would like to make an image appear on one of your pages, simply add an image named as `thumbnail.(jpg|png|gif)` to the images directory of your page.
-Eg.: If you would like to add a thumbnail to your home page, place a `thumbnail.jpg` in `images/home/thumbnail.jpg`
+Eg.: If you would like to add a thumbnail to your about-us page, place a `thumbnail.jpg` in `images/about-us/thumbnail.jpg`
 
-Then in your `home.md` you can use the custom liquid tag helper to output the image by doing:
+Then in your `about-us.md` you can use the custom liquid tag helper to output the image by doing:
 ######
 	{% thumbnail 250w 250h #[image-id] .[image-class] %}
 
@@ -99,21 +144,26 @@ This starts the server at `localhost` and port `1619`
 ##### Adding tags to pages
 In your `config.yml`
 #
-	tagged: tagged
-This specifies the page that you want to serve for tags. For Eg.: if you want something like `http://yoursite.com/tags` change it to the following:
+	tagged: 
+	name: tagged
+This specifies the page that you want to serve for tags. For Eg.: if you want something like `http://yoursite.com/blog/tags` change it to the following:
 #
-	tagged: tags
+	tagged: 
+	name: tags
+	permalink: blog/
 
-To create markup for your templates `striker` provides two files:
+Creating markup for your tag template:
 
-To provide markup for the main tags page. Eg.: `http://yoursite.com/tagged` add markup in the following template.
-
-* `templates/tags/index.html`
-		
-To provide markup for a specific tag page. Eg.: `http://yoursite.com/tagged/ruby` add markup in the following template
+To provide markup for specific tag. Eg.: `http://yoursite.com/tagged/ruby` add markup in the following template.
 
 * `templates/tags/tag.html`
+		
+Here you get the `tagged` variable that contains the following fields:
+#
+	tagged.name: The name of the tag
+	tagged.pages: All pages that have the specified tag name
 
+<!--
 ##### Site Archive
 Archive of posts is quite commin in blogs. If you would like to add an archive to your site, follow the below steps:
 
@@ -136,6 +186,15 @@ To access a specific archive in your archive templates use the following:
 	{% for page in pages %}
 		<a href="{{ page.url }}">{{ page.title }}</a>
 	{% endfor %}
+-->
+
+##### Generating Sitemap
+[Sitemaps](http://en.wikipedia.org/wiki/Sitemaps) are useful for search engines to crawl url's on a website.
+
+To generate a `sitemap.xml` and `robots.txt` run the following:
+	
+	bin/striker sitemap
+This generates `sitemap.xml` and `robots.txt` in the `extras/` directory.
 
 ##### Helper Tags Available:
 *Share current page on twitter*
@@ -158,6 +217,22 @@ To access a specific archive in your archive templates use the following:
 #####
 	{% soundcloud 3058346 400w 200h %}
 
+*Include Page*
+#####
+	{% include header %}
+
+*Sections*
+If you would like to target a particular content of your markdown in a specific html element in your template, then use the following in your markdown file:
+
+	{% section mysection %}
+	Hi, this is a section
+	{% endsection mysection %}
+
+And you can display this `section` in your template by using:
+
+	{{ page.sections.mysection }}
+
+<!--
 #### Available Page Data
 *Note that all variables configured in the `yaml front-matter` for each page and all site config that is mentioned in the following section is availble with `page` and `site` variables. For Eg.: If you would like to display the page title you can use `{{ page.title }}`. Similarly to display the `site name`, you can use `{{ site.name }}`*
 
@@ -187,11 +262,24 @@ Additional variables provided by `striker` for each page is as follows:
 | include\_assets | Directories that you would like to be compiled into the `assets` directory of your site. |
 | include | Include any directories/files other than pages to be copied into the `public` directory. You need to specify them as an array of files/directories and this would recursively copy everything specified in the directory. A good example would be: <br><br> *include*: <br> - .htaccess |
 
+-->
 
+#### Preview Site
+	$ bin/striker strike
+
+To preview in your browser go to:
+#
+	http://localhost:1619
+
+#### Preview Site Without Building
+	$ bin/striker strike --quiet
 
 #### Build Website
-	$ striker build
+	$ bin/striker build
 Generate the final website by creating a `public/` directory
+
+#### Upload/Sunc Site To Remote Server
+	$ bin/striker sync
 
 <!--
 ## Contributing
