@@ -22,7 +22,7 @@ Or install it yourself as:
 	
 	$ git clone git@github.com:swaroopsm/striker.git
 
-   <!-- $ gem install striker --pre -->
+<!-- $ gem install striker --pre -->
    
 
 ## Usage
@@ -137,7 +137,7 @@ Then to display images in your template use the following:
 	{% endfor %}
 
 ##### Start the Server
-	$ striker strike
+	$ bin/striker strike
 This starts the server at `localhost` and port `1619`
 
 ### Some Goodies:
@@ -221,7 +221,8 @@ This generates `sitemap.xml` and `robots.txt` in the `extras/` directory.
 #####
 	{% include header %}
 
-*Sections*
+*Sections:*
+#####
 If you would like to target a particular content of your markdown in a specific html element in your template, then use the following in your markdown file:
 
 	{% section mysection %}
