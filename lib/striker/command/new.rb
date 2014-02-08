@@ -17,6 +17,7 @@ module Striker
 					FileUtils.mkdir_p File.join(self.source, @site_name, "media/images")
 					FileUtils.mkdir_p File.join(self.source, @site_name, "media/videos")
 					FileUtils.mkdir_p File.join(self.source, @site_name, "media/sounds")
+					FileUtils.mkdir_p File.join(self.source, @site_name, "includes")
 					FileUtils.mkdir_p File.join(self.source, @site_name, "plugins")
 					FileUtils.mkdir_p File.join(self.source, @site_name, "extras")
 					default_page
